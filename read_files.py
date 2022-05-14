@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from helpers import Gauss, cos_func, objective
 
-BREAKDOWN_FILENAME = 'percentage_breakdown_pity_0.txt'
+BREAKDOWN_FILENAME = 'percentage_breakdown_pity_0.csv'
 SPACING = "     "
 
 def lookup_or_run_stats(wish_num, wish_stats, filename=BREAKDOWN_FILENAME, trials=10000,pity=0):

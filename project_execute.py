@@ -68,8 +68,8 @@ days_till_end_of_banner += 21
 days_till_end_of_banner += (42-(days_into_update))
 trials = 100000
 
-zero_pity_filename = percentage_breakdown_folder + 'percentage_breakdown_pity_0.txt'
-current_pity_filename=  percentage_breakdown_folder + 'percentage_breakdown_pity_' + str(current_pity) + '.txt' 
+zero_pity_filename = percentage_breakdown_folder + 'percentage_breakdown_pity_0.csv'
+current_pity_filename=  percentage_breakdown_folder + 'percentage_breakdown_pity_' + str(current_pity) + '.csv' 
 
 print("Current Statistics:")
 temp_stats = WishStats(total_pulls, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=0, set_guaranteed=False)

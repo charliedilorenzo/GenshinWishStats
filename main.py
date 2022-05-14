@@ -28,7 +28,7 @@ currentDay = datetime.now().day
 currentDate = datetime.now().date()
 currentVersion = 2.6
 
-input_file = 'percentage_breakdown_mostly_correct.txt'
+input_file = 'percentage_breakdown_mostly_correct.csv'
 # ===========================================================================================================================================================================================
 #  PRIMOGEM INFO
 # ===========================================================================================================================================================================================
@@ -80,7 +80,7 @@ trials = 100000
 
 print("Current Statistics:")
 temp_stats = WishStats(total_pulls, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=0, set_guaranteed=False)
-read_files.lookup_or_run_stats(total_pulls,temp_stats,filename='percentage_breakdown_mostly_correct.txt')
+read_files.lookup_or_run_stats(total_pulls,temp_stats,filename='percentage_breakdown_mostly_correct.csv')
 
 
 # plot_wishes_against_num_pulled(trials)

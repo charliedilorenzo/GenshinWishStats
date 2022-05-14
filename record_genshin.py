@@ -50,11 +50,11 @@ def record_average_ru():
 # current_wishes = 656
 # current_ru = 6
 # #check if we have previous data
-# if (not exists('average_ru.txt')):
-#   with open('average_ru.txt', 'w') as f:
+# if (not exists('average_ru.csv')):
+#   with open('average_ru.csv', 'w') as f:
 #     f.write("Trials = " + str(trials)+ "\n")
 # else:
-#   with open('average_ru.txt', 'r') as f:
+#   with open('average_ru.csv', 'r') as f:
 #     for line in f:
 #       if line == "":
 #         last_line = line
@@ -69,7 +69,7 @@ def record_average_ru():
 # if current_ru >= 7:
 #   pass
 # else:
-#   with open('average_ru.txt', 'a') as f:
+#   with open('average_ru.csv', 'a') as f:
 #     for j in range(current_wishes,1200):
 #       output_string = "Wishes Available: " + str(j) + "        Average RU: " 
 #       total_pulls = j
@@ -84,12 +84,12 @@ def record_average_ru():
 # print(j)
     pass
 
-def record_percentage_breakdown(trials, filename='percentage_breakdown.txt',column_description_list=DEFAULT_COLUMN_LABELS,timer=True, five_stars_desired=0, guaranteed_desired=0,pity=0):
+def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',column_description_list=DEFAULT_COLUMN_LABELS,timer=True, five_stars_desired=0, guaranteed_desired=0,pity=0):
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # # WRITE TO EXTERNAL FILE BREAKDOWN OF PERCENTAGE AT EACH CONSTELLATION PER AMOUNT OF WISHES
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     percentage_breakdown_folder = 'percentage_breakdown_files/'
-    timer_filename = consts.TIMER_FOLDER+filename.replace(".txt","_timer.txt")
+    timer_filename = consts.TIMER_FOLDER+filename.replace(".csv","_timer.csv")
     filename = percentage_breakdown_folder+filename
     justification_list = []
     string_column_description = ""

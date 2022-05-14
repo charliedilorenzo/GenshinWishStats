@@ -4,7 +4,7 @@
     - datafil
 - include non-default settings for breakdowns
 - create one for weapon banner
-- recreate percentage_breakdown.txt
+- recreate percentage_breakdown.csv
 - recreate average statistics
 - show wishing distribtuion on graphs
 - machine learning on primo projection?

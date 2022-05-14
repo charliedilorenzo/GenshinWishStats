@@ -11,8 +11,8 @@ num_starglitter = consts.NUM_STARGLITTER
 num_genesis = consts.NUM_GENESIS
 
 primo_record_folder = consts.PRIMO_RECORD_FOLDER
-banner_end_date_filename = primo_record_folder+'primogem_projection_over_time.txt'
-one_month_filename = primo_record_folder+'primogem_projection_one_month.txt'
+banner_end_date_filename = primo_record_folder+'primogem_projection_over_time.csv'
+one_month_filename = primo_record_folder+'primogem_projection_one_month.csv'
 
 print(primo_record_folder+banner_end_date_filename)
 
