@@ -1,0 +1,136 @@
+#Baizhu Projection as of 12/9/21 for Baizhu in 2.7
+num_wishes = 568 
+#Baizhu Projection as of 2/15/22 for Baizhu in 2.7
+num_wishes = 569
+#Baizhu Projection as of 2/15/22 for Baizhu in (3.0 / 2.9)
+num_wishes = 714 
+#Baizhu Projection as of 3/2/22 for Baizhu in (3.0 / 2.9)
+num_wishes = 512
+Baizhu Projection as of 3/15/22 for Baizhu in (3.0 / 2.9)
+num_wishes = 613
+Record of primos on 2022-03-22, Version 2.5
+68480
+Projection of primos on 2022-03-22 for Baizhu in end of 2.8
+110920
+Record of primos on 2022-03-24, Version 2.5
+68960
+Projection of primos on 2022-03-24 for Baizhu in end of 2.8
+112200
+Record of primos on 2022-03-28, Version 2.5
+69600
+Projection of primos on 2022-03-28 for Baizhu in end of 2.8
+110910
+Record of primos on 2022-04-01, Version 2.5
+73120
+Projection of primos on 2022-04-01 for Baizhu in end of 2.8
+109200
+Record of primos on 2022-04-04, Version 2.5
+73760
+Projection of primos on 2022-04-04 for Baizhu in end of 2.8
+109840
+Record of primos on 2022-04-12, Version 2.5
+75360
+Projection of primos on 2022-04-12 for Baizhu in end of 2.8
+110240
+Record of primos on 2022-04-14, Version 2.5
+75680
+Projection of primos on 2022-04-14 for Baizhu in end of 2.8
+110260
+Record of primos on 2022-04-19, Version 2.5
+80160
+Projection of primos on 2022-04-19 for Baizhu in end of 2.8
+113990
+Record of primos on 2022-04-20, Version 2.5
+80640
+Projection of primos on 2022-04-20 for Baizhu in end of 2.8
+114240
+Record of primos on 2022-04-24, Version 2.6
+81440
+Projection of primos on 2022-04-24 for Baizhu in end of 2.9
+114440
+Record of primos on 2022-04-26, Version 2.5
+80640
+Projection of primos on 2022-04-26 for Baizhu in end of 2.8
+113340
+Record of primos on 2022-04-26, Version 2.5
+82080
+Projection of primos on 2022-04-26 for Baizhu in end of 2.8
+114780
+Record of primos on 2022-04-26, Version 2.5
+82080
+Projection of primos on 2022-04-26 for Baizhu in end of 2.8
+114780
+Record of primos on 2022-05-01, Version 2.5
+84640
+Projection of primos on 2022-05-01 for Baizhu in end of 2.8
+114890
+Record of primos on 2022-05-03, Version 2.5
+84960
+Projection of primos on 2022-05-03 for Baizhu in end of 2.8
+114910
+Record of primos on 2022-05-04, Version 2.5
+85120
+Projection of primos on 2022-05-04 for Baizhu in end of 2.8
+114920
+Record of primos on 2022-05-05, Version 2.5
+85760
+Projection of primos on 2022-05-05 for Baizhu in end of 2.8
+115410
+Record of primos on 2022-05-06, Version 2.5
+86080
+Projection of primos on 2022-05-06 for Baizhu in end of 2.8
+115580
+Record of primos on 2022-05-09, Version 2.5
+86560
+Projection of primos on 2022-05-09 for Baizhu in end of 2.8
+115610
+Record of primos on 2022-05-10, Version 2.5
+87040
+Projection of primos on 2022-05-10 for Baizhu in end of 2.8
+115940
+Record of primos on 2022-05-11, Version 2.5
+87520
+Projection of primos on 2022-05-11 for Baizhu in end of 2.8
+125600
+Record of primos on 2022-05-11, Version 2.5
+
+Record of primos on 2022-05-13, Version 2.5
+87840
+Projection of primos on 2022-05-13 for Baizhu in end of 2.8
+125620
+
+Record of primos on 2022-05-13, Version 2.5
+87840
+Projection of primos on 2022-05-13 for Baizhu in end of 2.8
+125620
+
+Record of primos on 2022-05-13, Version 2.5
+87840
+Projection of primos on 2022-05-13 for Baizhu in end of 2.8
+125620
+
+Record of primos on 2022-05-13, Version 2.5
+87840
+Projection of primos on 2022-05-13 for Baizhu in end of 2.8
+125620
+
+Record of primos on 2022-05-13, Version 2.5
+87840
+Projection of primos on 2022-05-13 for Baizhu in end of 2.8
+125620
+
+Record of primos on 2022-05-13, Version 2.5
+87840
+Projection of primos on 2022-05-13 for Baizhu in end of 2.8
+125620
+
+Record of primos on 2022-05-13, Version 2.5
+87840
+Projection of primos on 2022-05-13 for Baizhu in end of 2.8
+125620
+
+Record of primos on 2022-05-13, Version 2.5
+87840
+Projection of primos on 2022-05-13 for Baizhu in end of 2.8
+125620
+

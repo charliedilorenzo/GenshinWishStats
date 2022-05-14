@@ -1,0 +1,2 @@
+Date Recorded,      Date Projected,     Current Primogems,  Primogems Projected
+2022-05-13,         2022-06-24,         87970,              98980
