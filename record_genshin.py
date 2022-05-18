@@ -74,7 +74,7 @@ def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',colu
                 pass
                 last_line = line
         if (',' in last_line):
-            #split the line by colons and target the one that will give us the current wishes
+            #csv stores current wishes in first column final line
             splitting = last_line.split(',')
             current_wishes = int(re.sub("[^0-9]", "", splitting[0]))+1
     print("-------------- Starting with Wish Num: {0} --------------".format(current_wishes))
@@ -90,9 +90,8 @@ def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',colu
             ratio_list = stats.breakdown_percent_rateups()
             #show proper amount of digits in float (probably too many)
             ratio_list = ["%.4f" % r for r in ratio_list]
-            #make sure things are spaced evenly
             for k in range(0,8):
-                #make sure things are spaced evenly
+                #add commas
                 output_string +=  "," + str(ratio_list[k])
         output_string += "\n"
         with open(filename, 'a') as f:

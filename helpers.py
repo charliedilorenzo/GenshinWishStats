@@ -12,8 +12,7 @@ from datetime import date, datetime
 import math
 
 def justify_csv_double_layered_list(matrix, labels, extra_spaces=4):
-  #initialize list with indices
-  # max_length_list = [0 for i in range(0,100)]
+  #justify based on the maximum length string found per column
   max_length_list = []
   for i in range(0,len(labels)):
     max_length_list.append(len(labels[i]))

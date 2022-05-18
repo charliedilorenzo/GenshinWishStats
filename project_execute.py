@@ -93,21 +93,13 @@ print("No Pity + Starglitter+Proj: {0}".format(with_starglitter))
 temp_stats = WishStats(with_starglitter, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=0, set_guaranteed=False)
 read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename=zero_pity_filename,pity=0)
 
-# print()
-# print("Pity + Starglitter+Proj: Pulls= {0}, Pity={1}, Guaranteed={2}".format(with_starglitter,current_pity,current_guaranteed))
-# stats = WishStats(with_starglitter, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=current_pity, set_guaranteed=current_guaranteed)
-# stats.run_stats(trials)
-# stats.print_stats()
-# print()
-# stats.breakdown_percent_rateups()
-# print()
-# print(stats.tally_per_ru)
-
 print()
 print("Pity + Starglitter+Proj: Pulls= {0}, Pity={1}, Guaranteed={2}".format(with_starglitter,current_pity,current_guaranteed))
 temp_stats = WishStats(with_starglitter, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=current_pity, set_guaranteed=current_guaranteed)
-read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename=current_pity_filename,pity=current_pity)
-
+if (current_pity != 0 and current_guaranteed == False):
+  read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename=current_pity_filename,pity=current_pity)
+if (current_pity != 0 and current_guaranteed == True):
+  read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename="idontexist/",pity=current_pity)
 #projecting primos for an extra update in the future
 days_until_end_date = days_until_end_date+42
 proj_wishes =project_future_wishes(total_primos,0,0,days_until_end_date,True,False,silenced=True)
@@ -122,17 +114,10 @@ print("No Pity + Starglitter+Proj: {0}".format(with_starglitter))
 temp_stats = WishStats(with_starglitter, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=0, set_guaranteed=False)
 read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename=zero_pity_filename,pity=0)
 
-# print()
-# print("Pity + Starglitter+Proj: Pulls= {0}, Pity={1}, Guaranteed={2}".format(with_starglitter,current_pity,current_guaranteed))
-# stats = WishStats(with_starglitter, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=current_pity, set_guaranteed=current_guaranteed)
-# stats.run_stats(trials)
-# stats.print_stats()
-# print()
-# stats.breakdown_percent_rateups()
-# print()
-# print(stats.tally_per_ru)
-
 print()
 print("Pity + Starglitter+Proj: Pulls= {0}, Pity={1}, Guaranteed={2}".format(with_starglitter,current_pity,current_guaranteed))
 temp_stats = WishStats(with_starglitter, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=current_pity, set_guaranteed=current_guaranteed)
-read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename=current_pity_filename,pity=current_pity)
+if (current_pity != 0 and current_guaranteed == False):
+  read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename=current_pity_filename,pity=current_pity)
+if (current_pity != 0 and current_guaranteed == True):
+  read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename="idontexist/",pity=current_pity)
