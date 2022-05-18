@@ -1,3 +1,4 @@
+from datetime import date
 
 NUM_WISHES = 0
 NUM_PRIMOS = 0
@@ -10,4 +11,4 @@ CURRENT_GUARANTEED = False
 # 6 for a c6 character
 NUM_RATEUPS_DESIRED = 7
 
-BANNER_END_DATE = banner_end_date = date(2022,10,4)
+BANNER_END_DATE = date(2022,10,4)

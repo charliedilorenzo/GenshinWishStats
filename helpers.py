@@ -11,6 +11,13 @@ from consts import PROB_FIVE_STAR_AT_WISH_NUM
 from datetime import date, datetime
 import math
 
+def castable_as_int(string):
+  try:
+    int(string)
+    return True
+  except ValueError:
+    return False
+
 def justify_csv_double_layered_list(matrix, labels, extra_spaces=4):
   #justify based on the maximum length string found per column
   max_length_list = []
