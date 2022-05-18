@@ -1,3 +1,4 @@
+from cProfile import label
 import random
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,6 +10,31 @@ from os.path import exists
 from consts import PROB_FIVE_STAR_AT_WISH_NUM
 from datetime import date, datetime
 import math
+
+def justify_csv_double_layered_list(matrix, labels, extra_spaces=4):
+  #initialize list with indices
+  # max_length_list = [0 for i in range(0,100)]
+  max_length_list = []
+  for i in range(0,len(labels)):
+    max_length_list.append(len(labels[i]))
+  length = len(max_length_list)
+  for list in matrix:
+    for i in range(0,length):
+      if max_length_list[i] < len(str(list[i])):
+        max_length_list[i] = len(str(list[i]))
+  test = ""
+  for i in range(0,length):
+    labels[i] = (str(labels[i])+",").rjust(max_length_list[i]+extra_spaces)
+    test += labels[i]
+  print(test)
+
+  for i in range(0,len(matrix)):
+    test = ""
+    for j in range(0,length):
+      matrix[i][j] = (str(matrix[i][j])+",").rjust(max_length_list[j]+extra_spaces)
+      test += str(matrix[i][j])
+    print(test)
+  return matrix,labels
 
 def objective(x, a, b):
 	return a * x + b
