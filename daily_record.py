@@ -4,6 +4,7 @@ import math
 import consts
 from project_future_wishes import project_future_wishes
 from os.path import exists
+import userinput
 
 num_wishes = userinput.NUM_WISHES
 num_primos = userinput.NUM_PRIMOS
