@@ -8,7 +8,6 @@ TIMER_FOLDER = 'timer_files/'
 PRIMO_RECORD_FOLDER = 'primo_record_files/'
 PERCENTAGE_BREAKDOWN_FOLDER = 'percentage_breakdown_files/'
 
-# NUM_WISHES = 656
 NUM_WISHES = 15
 NUM_PRIMOS = 69530
 NUM_STARGLITTER = 372

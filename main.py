@@ -32,16 +32,16 @@ input_file = 'percentage_breakdown_mostly_correct.csv'
 # ===========================================================================================================================================================================================
 #  PRIMOGEM INFO
 # ===========================================================================================================================================================================================
-current_pity = consts.CURRENT_PITY
-current_guaranteed = consts.CURRENT_GUARANTEED
+current_pity = userinput.CURRENT_PITY
+current_guaranteed = userinput.CURRENT_GUARANTEED
 
-num_wishes = consts.NUM_WISHES
-num_primos = consts.NUM_PRIMOS
-num_starglitter = consts.NUM_STARGLITTER
-num_genesis = consts.NUM_GENESIS
+num_wishes = userinput.NUM_WISHES
+num_primos = userinput.NUM_PRIMOS
+num_starglitter = userinput.NUM_STARGLITTER
+num_genesis = userinput.NUM_GENESIS
 
 desired_five_stars = 15
-desired_ru = consts.NUM_RATEUPS_DESIRED
+desired_ru = userinput.NUM_RATEUPS_DESIRED
 dict = {}
 
 total_pulls = math.floor((num_primos+num_genesis)/160)+num_wishes + math.floor(num_starglitter/5)
@@ -51,7 +51,7 @@ print("Total Current Pulls: " + str(total_pulls))
 print()
 
 days_into_update = helpers.days_into_update_count()
-banner_end_date = consts.BANNER_END_DATE
+banner_end_date = userinput.BANNER_END_DATE
 days_until_end_date = (banner_end_date - currentDate)
 days_until_end_date = int(divmod(days_until_end_date.total_seconds(), 86400)[0])
 # ===========================================================================================================================================================================================
@@ -78,7 +78,8 @@ days_till_end_of_banner += 21
 days_till_end_of_banner += (42-(days_into_update))
 trials = 100000
 
-print("Current Statistics:")
+
+
 simulator = WishSim(four_rateups,four_stars,rateups,standard_five_stars)
 simulator.roll(total_pulls,desired_five_stars,desired_ru,False, current_pity,current_guaranteed)
 
