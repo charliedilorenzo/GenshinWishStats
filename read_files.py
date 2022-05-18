@@ -86,7 +86,7 @@ def read_full_breakdown_file(filename):
     if consts.PERCENTAGE_BREAKDOWN_FOLDER not in filename:
         percentage_breakdown_folder = consts.PERCENTAGE_BREAKDOWN_FOLDER
         filename = percentage_breakdown_folder+filename
-    data_splitting = []
+    data_double_layered = []
     data_labels = []
     with open(filename, 'r') as f:
         for line in f:
@@ -96,13 +96,16 @@ def read_full_breakdown_file(filename):
                     data_labels[-1] = data_labels[-1].replace("SKIP","")
                     data_labels[-1] = data_labels[-1].replace("\n","")
                     data_labels = [(data_labels[i]).strip() for i in range(0,len(data_labels))]
-                    continue
+                continue
             temp = line.split(',')
             temp[-1] = temp[-1].replace("\n","")
             temp = [temp[i].replace(" ","") for i in range(0,len(temp))]
             temp = [temp[i].strip() for i in range(0,len(temp))]
-
-    print(data_labels)
+            for i in range(0,len(temp)):
+                if '.' in temp[i]:
+                    temp[i] = float(temp[i])
+            data_double_layered.append(temp)
+    return data_double_layered,data_labels
 
 def read_timer_file(timer_filename):
     if consts.TIMER_FOLDER not in timer_filename:
