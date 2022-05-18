@@ -1,4 +1,5 @@
 test.py
-primo_record_files/primogem_projection_one_month.csv
-primo_record_files/primogem_projection_over_time.csv
-test.py
+primo_record_files/*
+percentage_breakdown_files/*
+recorded_stats/*
+timer_files/*
