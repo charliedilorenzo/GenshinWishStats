@@ -28,17 +28,17 @@ current_effective_primogems= num_wishes*160+num_primos+num_genesis+math.floor(nu
 future_primos = project_future_wishes(num_primos+num_genesis, num_wishes, num_starglitter,  42, current_days_into_update = -1, silenced=True)
 
 output_string = ""
-output_string+= (str(datetimenow)+ ",").ljust(20)
-output_string+= (str(end_date) + ",").ljust(20)
-output_string+= (str(current_effective_primogems)+ ",").ljust(20)
-output_string+= (str(future_primos) + "\n").ljust(20)
+output_string+= (str(datetimenow)+ ",")
+output_string+= (str(end_date) + ",")
+output_string+= (str(current_effective_primogems)+ ",")
+output_string+= (str(future_primos) + "\n")
 
 if (not exists(one_month_filename)):
     initial_string = ""
-    initial_string += ("Date Recorded"+ ",").ljust(20)
-    initial_string += ("Date Projected" + ",").ljust(20)
-    initial_string += ("Current Primogems"+ ",").ljust(20)
-    initial_string += ("Primogems Projected" + "\n").ljust(20)
+    initial_string += ("Date Recorded"+ ",")
+    initial_string += ("Date Projected" + ",")
+    initial_string += ("Current Primogems"+ ",")
+    initial_string += ("Primogems Projected" + "\n")
     with open(one_month_filename, 'a') as f:
         f.write(initial_string)
 
