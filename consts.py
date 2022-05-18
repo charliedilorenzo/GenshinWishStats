@@ -17,4 +17,8 @@ NUM_GENESIS = 4200
 CURRENT_PITY = 53
 CURRENT_GUARANTEED = True
 
+# 6 for a c6 character
+NUM_RATEUPS_DESIRED = 7
+
 BANNER_END_DATE = banner_end_date = date(2022,10,4)
+

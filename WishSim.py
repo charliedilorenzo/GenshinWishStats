@@ -13,7 +13,7 @@ from helpers import y__random_under_one
 class WishSim:
 
   def __init__(self, ru_four_stars, four_stars, ru_five_stars, five_stars):
-    self.five = "5⭐"
+    self.five = "5⭐⭐⭐⭐⭐"
     self.four = "4⭐"
     self.prob_at_value = PROB_FIVE_STAR_AT_WISH_NUM
     

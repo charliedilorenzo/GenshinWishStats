@@ -40,8 +40,8 @@ num_primos = consts.NUM_PRIMOS
 num_starglitter = consts.NUM_STARGLITTER
 num_genesis = consts.NUM_GENESIS
 
-desired_five_stars = 0
-desired_ru = 0
+desired_five_stars = 15
+desired_ru = consts.NUM_RATEUPS_DESIRED
 dict = {}
 
 total_pulls = math.floor((num_primos+num_genesis)/160)+num_wishes + math.floor(num_starglitter/5)
@@ -79,10 +79,6 @@ days_till_end_of_banner += (42-(days_into_update))
 trials = 100000
 
 print("Current Statistics:")
-temp_stats = WishStats(total_pulls, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=0, set_guaranteed=False)
-read_files.lookup_or_run_stats(total_pulls,temp_stats,filename='percentage_breakdown_mostly_correct.csv')
+simulator = WishSim(four_rateups,four_stars,rateups,standard_five_stars)
+simulator.roll(total_pulls,desired_five_stars,desired_ru,False, current_pity,current_guaranteed)
 
-
-# plot_wishes_against_num_pulled(trials)
-
-# record_genshin.record_primos(2.6,3, total_pulls*160,banner_end_date=banner_end_date, welkin_moon=True,battlepass=False)
