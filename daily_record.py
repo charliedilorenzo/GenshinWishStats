@@ -6,7 +6,7 @@ from project_future_wishes import project_future_wishes
 from os.path import exists
 import userinput
 
-num_wishes = userinput.NUM_WISHES
+num_wishes = userinput.NUM_FATES
 num_primos = userinput.NUM_PRIMOS
 num_starglitter = userinput.NUM_STARGLITTER
 num_genesis = userinput.NUM_GENESIS

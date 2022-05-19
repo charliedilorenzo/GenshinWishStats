@@ -26,7 +26,7 @@ percentage_breakdown_folder = 'percentage_breakdown_files/'
 current_pity = userinput.CURRENT_PITY
 current_guaranteed = userinput.CURRENT_GUARANTEED
 
-num_wishes = userinput.NUM_WISHES
+num_wishes = userinput.NUM_FATES
 num_primos = userinput.NUM_PRIMOS
 num_starglitter = userinput.NUM_STARGLITTER
 num_genesis = userinput.NUM_GENESIS
