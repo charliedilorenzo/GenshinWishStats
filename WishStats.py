@@ -13,6 +13,9 @@ from matplotlib.cbook import print_cycles
 import re
 from NoStreamObj import NoStdStreams
 
+def main(**kwargs):
+  pass
+
 class WishStats:
   def __init__(self,num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars,  set_pity = 0,set_guaranteed=False):
     self.total_pulls = 0

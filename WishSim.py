@@ -9,7 +9,36 @@ from os.path import exists
 from NoStreamObj import NoStdStreams
 from consts import PROB_FIVE_STAR_AT_WISH_NUM
 from helpers import y__random_under_one
+import userinput
+import math
+import consts
 
+def main(**kwargs):
+  #defaults
+  standard_five_stars = consts.STANDARD_FIVE_STARS
+  four_stars = consts.FOUR_STARS
+  ru_four_stars = userinput.RU_FOUR_STARS
+  ru_five_stars = userinput.RU_FIVE_STARS
+
+  #pity, etc
+  current_pity = userinput.CURRENT_PITY
+  current_guaranteed = userinput.CURRENT_GUARANTEED
+
+  #pulls
+  num_fates = userinput.num_fates
+  num_primos = userinput.NUM_PRIMOS
+  num_starglitter = userinput.NUM_STARGLITTER
+  num_genesis = userinput.NUM_GENESIS
+
+  total_pulls = math.floor((num_primos+num_genesis)/160)+num_wishes + math.floor(num_starglitter/5)
+
+  #desired
+  desired_five_stars = 15
+  desired_ru = userinput.NUM_RATEUPS_DESIRED
+
+  simulator = WishSim(ru_four_stars,four_stars,ru_five_stars,standard_five_stars)
+  [wishes_used, five_stars_acquired, ru_count] = simulator.roll(total_pulls,desired_five_stars,desired_ru,False, current_pity,current_guaranteed)
+  return [wishes_used, five_stars_acquired, ru_count]
 class WishSim:
 
   def __init__(self, ru_four_stars, four_stars, ru_five_stars, five_stars):
@@ -20,14 +49,14 @@ class WishSim:
     self.ru_four_stars = ru_four_stars
     self.four_stars = four_stars
     self.ru_five_stars = ru_five_stars
-    self.five_stars = five_stars
+    self.standard_five_stars = five_stars
 
     self.guaranteed = False
     self.four_guaranteed = False
     self.pity = 0
     self.four_pity = 0
     self.number_pulled = 0
-    self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.five_stars))) }
+    self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
 
   def print_for_char(self, char):
@@ -66,7 +95,7 @@ class WishSim:
     self.four_pity = 0
     self.total_pulls = 0
     self.number_pulled = 0
-    self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.five_stars))) }
+    self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
 
   def generate_five_star(self, silenced = False):
@@ -80,7 +109,7 @@ class WishSim:
       self.five_tally[choice] +=1
       self.guaranteed = False
     else:
-      choice = random.choice(self.five_stars)
+      choice = random.choice(self.standard_five_stars)
       if not silenced:
         print(self.five+choice+" - Rolls Left: "+str(self.number_pulled)+" - Pity: "+str(self.pity))
       self.five_tally[choice] +=1
