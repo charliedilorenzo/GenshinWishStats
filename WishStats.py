@@ -12,8 +12,22 @@ from WishSim import WishSim
 from matplotlib.cbook import print_cycles
 import re
 from NoStreamObj import NoStdStreams
+import helpers
 
-def main(**kwargs):
+def main(num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars, current_pity,current_guaranteed):
+  wishstat = WishStats(num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars, current_pity,current_guaranteed)
+  print()
+  print()
+
+  print("How many trials should be done?")
+  trials = helpers.take_int_as_input("(more takes longer and gives more accurate averages and medians, but less accurate mins/maxs):   ")
+  print()
+  print()
+  print("Press Control+C or Command+C to cancel. It may take a minute or two")
+  print()
+  print()
+  wishstat.run_stats(trials)
+  wishstat.print_stats()
   pass
 
 class WishStats:
