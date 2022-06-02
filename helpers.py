@@ -15,7 +15,7 @@ def take_int_as_input(message, iter_bound = 100):
   iters = 0
   temp = "Error"
   while iters < 100:
-    temp = input("Name the date or a number of days from yoday you want to project for ('n' or 'm/d/y'): ")
+    temp = input(message)
     if (castable_as_int(temp)):
       temp = int(temp)
       break
