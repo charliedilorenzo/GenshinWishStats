@@ -11,6 +11,22 @@ from consts import PROB_FIVE_STAR_AT_WISH_NUM
 from datetime import date, datetime
 import math
 
+def take_int_as_input(message, iter_bound = 100):
+  iters = 0
+  temp = "Error"
+  while iters < 100:
+    temp = input("Name the date or a number of days from yoday you want to project for ('n' or 'm/d/y'): ")
+    if (castable_as_int(temp)):
+      temp = int(temp)
+      break
+  if(iters > iter_bound or temp == "Error"):
+      raise StopIteration("Too many failed inputs")
+  return temp
+
+def total_primos(raw_primos, raw_fates, num_genesis, raw_starglitter):
+  total_primos = raw_primos+num_genesis+raw_fates*160+math.floor(raw_starglitter/5)*160
+  return total_primos
+
 def castable_as_int(string):
   try:
     int(string)
