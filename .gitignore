@@ -3,3 +3,7 @@ primo_record_files/*
 percentage_breakdown_files/*
 recorded_stats/*
 timer_files/*
+userinput.py
+todos.txt
+todos.py
+*.pyc
