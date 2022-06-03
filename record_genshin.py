@@ -28,10 +28,10 @@ def record_primos(current_update_version, updates_into_future, currrent_primo_nu
     if (banner_end_date != currentDate):
         day_difference = banner_end_date- currentDate
         day_difference = int(divmod(day_difference.total_seconds(), 86400)[0])
-        future_primo_num = project_future_wishes(currrent_primo_num,0,0,days_till_end_of_banner=day_difference, welkin_moon=welkin_moon, battlepass= battlepass,silenced=True)
+        future_primo_num = project_future_wishes(currrent_primo_num,0,0,day_difference, welkin_moon=welkin_moon, battlepass= battlepass,silenced=True)
     elif(updates_into_future >0):
         days_till_end_of_banner =  42*updates_into_future
-        future_primo_num = project_future_wishes(currrent_primo_num,0,0,days_till_end_of_banner=days_till_end_of_banner, welkin_moon=welkin_moon, battlepass= battlepass)
+        future_primo_num = project_future_wishes(currrent_primo_num,0,0,days_till_end_of_banner, welkin_moon=welkin_moon, battlepass= battlepass)
     with open(filename, 'a') as f:
         f.write(future_txt)
         f.write(str(future_primo_num ))
