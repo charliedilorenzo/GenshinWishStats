@@ -28,6 +28,17 @@ def main(num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four
   print()
   wishstat.run_stats(trials)
   wishstat.print_stats()
+  #silence it
+  with NoStdStreams():
+    ratio_list = wishstat.breakdown_percent_rateups()
+  ratio_list = ["%.4f" % r for r in ratio_list]
+  ratio_list = [[r+"%" for r in ratio_list]]
+  labels = [ "X","C0","C1","C2","C3","C4","C5","C6"]
+  string,labels = helpers.justify_csv_double_layered_list(ratio_list, labels)
+  print("X = Didn't get the rateup")
+  print(" ".join(labels))
+  for line in string:
+    print(" ".join(line))
   pass
 
 class WishStats:

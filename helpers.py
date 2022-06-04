@@ -82,18 +82,12 @@ def justify_csv_double_layered_list(matrix, labels, extra_spaces=4):
     for i in range(0,length):
       if max_length_list[i] < len(str(list[i])):
         max_length_list[i] = len(str(list[i]))
-  test = ""
   for i in range(0,length):
-    labels[i] = (str(labels[i])+",").rjust(max_length_list[i]+extra_spaces)
-    test += labels[i]
-  print(test)
+    labels[i] = (str(labels[i])).ljust(max_length_list[i]+extra_spaces)
 
   for i in range(0,len(matrix)):
-    test = ""
     for j in range(0,length):
-      matrix[i][j] = (str(matrix[i][j])+",").rjust(max_length_list[j]+extra_spaces)
-      test += str(matrix[i][j])
-    print(test)
+      matrix[i][j] = (str(matrix[i][j])).ljust(max_length_list[j]+extra_spaces)
   return matrix,labels
 
 def objective(x, a, b):
