@@ -11,6 +11,24 @@ from consts import PROB_FIVE_STAR_AT_WISH_NUM
 from datetime import date, datetime
 import math
 
+def print_messaged_banner(message, length = 80, mode = "single_line"):
+  # default 80 is arbitrarily selected by me
+  remaining_length = length - len(message)
+  divided = math.floor(remaining_length/2)
+  # so that we always have length the same for all lines (not fully symmetrical for message line though)
+  extra = ""
+  if len(message)+2*divided != length:
+    extra = "-"
+  #for padding
+  divided = divided-1
+  if mode == "triple_line":
+    print("-"*length)
+    print("-"*divided,"{:^1}".format(message),"-"*divided+extra)
+    print("-"*length)
+  #single line for default
+  else:
+    print("-"*divided,"{:^1}".format(message),"-"*divided+extra)
+
 def take_int_as_input(message, iter_bound = 100):
   iters = 0
   temp = "Error"
