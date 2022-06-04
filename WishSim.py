@@ -12,8 +12,10 @@ from helpers import y__random_under_one
 import userinput
 import math
 import consts
+import time
 
-def main(user_data):
+
+def main(user_data, dumb_mode = True):
   #defaults
   standard_five_stars = consts.STANDARD_FIVE_STARS
   four_stars = consts.FOUR_STARS
@@ -36,12 +38,57 @@ def main(user_data):
   desired_five_stars = 15
   desired_ru = user_data["desired_ru"]
 
-  simulator = WishSim(ru_four_stars,four_stars,ru_five_stars,standard_five_stars)
+  simulator = WishSim(ru_four_stars,four_stars,ru_five_stars,standard_five_stars,pity=current_pity,guaranteed=current_guaranteed)
+  simulator.print_interesting_stats()
+  print()
   [wishes_used, five_stars_acquired, ru_count] = simulator.roll(total_pulls,desired_five_stars,desired_ru,False, current_pity,current_guaranteed)
+
+  indent = consts.INDENT
+  assessment = ru_count >= desired_ru
+  assessment = ru_count >= desired_ru
+  # dumb_mode = False
+  print()
+  if (dumb_mode):
+    #now we add dumb stuff to cmd output
+    print("Goal Achieved? ")
+    print()
+    print()
+    sys.stdout.write(indent+indent+"drumroll please ")
+    sys.stdout.flush()
+    # https://stackoverflow.com/questions/17220128/display-a-countdown-for-the-python-sleep-function
+    for i in range(0,5):
+      sys.stdout.write("."+' ')
+      sys.stdout.flush()
+      time.sleep(.38)
+    time.sleep(.5)
+    print()
+    print()
+    if (assessment):
+      sys.stdout.write(indent+indent+"YES")
+      sys.stdout.flush()
+      time.sleep(.8)
+      sys.stdout.write("!!!!!")
+      sys.stdout.flush()
+    else:
+      sys.stdout.write(indent+indent+"no")
+      sys.stdout.flush()
+      time.sleep(.8)
+      sys.stdout.write("....")
+      sys.stdout.flush()
+    time.sleep(2)
+  else:
+    if assessment:
+      print(indent, indent, "Goal Achieved")
+    else:
+      print(indent, indent, "Goal NOT Achieved")
+  print()
+  simulator.print_interesting_stats(after=True)
+  print(consts.INDENT,"Desired Number of Rateups: ", str(desired_ru))
+  print()
   return [wishes_used, five_stars_acquired, ru_count]
 class WishSim:
 
-  def __init__(self, ru_four_stars, four_stars, ru_five_stars, five_stars):
+  def __init__(self, ru_four_stars, four_stars, ru_five_stars, five_stars, pity = 0, guaranteed = False):
     self.five = "5⭐⭐⭐⭐⭐"
     self.four = "4⭐"
     self.prob_at_value = PROB_FIVE_STAR_AT_WISH_NUM
@@ -50,15 +97,16 @@ class WishSim:
     self.four_stars = four_stars
     self.ru_five_stars = ru_five_stars
     self.standard_five_stars = five_stars
+    self.guaranteed = guaranteed
+    self.pity = pity
 
-    self.guaranteed = False
     self.four_guaranteed = False
-    self.pity = 0
     self.four_pity = 0
     self.number_pulled = 0
     self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
     self.num_wishes = 0
+    self.rolling_results = {"Wishes Used": 0, "5⭐ total": 0,"Rate_up 5⭐s": 0, "4⭐ total": 0}
 
   def print_for_char(self, char):
     if (char in self.five_tally.keys()):
@@ -98,6 +146,20 @@ class WishSim:
     self.number_pulled = 0
     self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
+
+  def print_interesting_stats(self, after=False):
+    indent = consts.INDENT
+    print()
+    print("Some Interesting Statistics:")
+    print(indent, "Current Number of Wishes Remaining: ", str(self.num_wishes))
+    print(indent, "Current Five Star Pity: ", str(self.pity))
+    print(indent, "Current Guaranteed Status: ", str(self.guaranteed))
+    print()
+    if (after):
+      print(indent, "Wishes Used: ", str(self.rolling_results["Wishes Used"]))
+      print(indent, "4⭐ total: ", str(self.rolling_results["4⭐ total"]))
+      print(indent, "5⭐ total: ", str(self.rolling_results["5⭐ total"]))
+      print(indent, "Rate_up 5⭐s: ", str(self.rolling_results["Rate_up 5⭐s"]))
 
   def generate_five_star(self, silenced = False):
     # this is to check if we win 50/50, it will still run if we have guaranteed but it will not overwrite
@@ -151,7 +213,7 @@ class WishSim:
       self.pity+=1
       self.four_pity +=1
       self.number_pulled+=1
-      # 5 star block
+      # 5 star block - different rates for different pity leves
       if (y__random_under_one(0.006) and self.pity < 74):
         self.generate_five_star(silenced=silenced)
         five_stars_acquired+=1
@@ -167,7 +229,7 @@ class WishSim:
         five_stars_acquired+=1
         continue
 
-      # 4 star block - not too sure about the values here
+      # 4 star block - not too sure about the values here, but I don't think most people mind
       if (self.four_pity >= 10):
         self.generate_four_star(silenced=silenced)
         continue
@@ -182,11 +244,10 @@ class WishSim:
 
     wishes_used = begin_wishes - self.num_wishes
     four_stars_acquired = self.num_four_stars_pulled()
-    if not silenced:
-        print()
-        print("Wishes Left: " + str(self.num_wishes))
-        print("Wishes Used: " + str(wishes_used))
-        print("5⭐ total: " +str(five_stars_acquired))
-        print("Rate_up 5⭐s: " +str(self.ru_count()))
-        print("4⭐ total: " +str(four_stars_acquired))
+
+    #update rolling results
+    self.rolling_results["Wishes Used"] = self.rolling_results["Wishes Used"]+wishes_used
+    self.rolling_results["5⭐ total" ] = self.rolling_results["5⭐ total" ]+five_stars_acquired
+    self.rolling_results["Rate_up 5⭐s" ] = self.rolling_results["Rate_up 5⭐s" ] +self.ru_count()
+    self.rolling_results["4⭐ total"] = self.rolling_results["4⭐ total"]+four_stars_acquired
     return [wishes_used, five_stars_acquired, self.ru_count()]

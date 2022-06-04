@@ -12,3 +12,4 @@ PERCENTAGE_BREAKDOWN_FOLDER = 'percentage_breakdown_files/'
 
 YES_RESPONSES = ["Yes", "yes", "y", "Y", "true", "True"]
 NO_RESPONSES = ["No", "no", "n", "N", "false", "False"]
+INDENT =  "    "
