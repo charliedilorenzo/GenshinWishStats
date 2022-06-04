@@ -13,7 +13,7 @@ import userinput
 import math
 import consts
 
-def main(**kwargs):
+def main(user_data):
   #defaults
   standard_five_stars = consts.STANDARD_FIVE_STARS
   four_stars = consts.FOUR_STARS
@@ -21,20 +21,20 @@ def main(**kwargs):
   ru_five_stars = userinput.RU_FIVE_STARS
 
   #pity, etc
-  current_pity = userinput.CURRENT_PITY
-  current_guaranteed = userinput.CURRENT_GUARANTEED
+  current_pity = user_data["current_pity"]
+  current_guaranteed = user_data["current_guaranteed"]
 
   #pulls
-  num_fates = userinput.num_fates
-  num_primos = userinput.NUM_PRIMOS
-  num_starglitter = userinput.NUM_STARGLITTER
-  num_genesis = userinput.NUM_GENESIS
+  num_fates = user_data["num_fates"]
+  num_primos = user_data["num_primos"]
+  num_starglitter = user_data["num_starglitter"]
+  num_genesis = user_data["num_genesis"]
 
-  total_pulls = math.floor((num_primos+num_genesis)/160)+num_wishes + math.floor(num_starglitter/5)
+  total_pulls = math.floor((num_primos+num_genesis)/160)+num_fates + math.floor(num_starglitter/5)
 
   #desired
   desired_five_stars = 15
-  desired_ru = userinput.NUM_RATEUPS_DESIRED
+  desired_ru = user_data["desired_ru"]
 
   simulator = WishSim(ru_four_stars,four_stars,ru_five_stars,standard_five_stars)
   [wishes_used, five_stars_acquired, ru_count] = simulator.roll(total_pulls,desired_five_stars,desired_ru,False, current_pity,current_guaranteed)
@@ -58,6 +58,7 @@ class WishSim:
     self.number_pulled = 0
     self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
+    self.num_wishes = 0
 
   def print_for_char(self, char):
     if (char in self.five_tally.keys()):
@@ -105,13 +106,13 @@ class WishSim:
     if (self.guaranteed):
       choice = random.choice(self.ru_five_stars)
       if not silenced:
-        print(self.five+choice+" - Rolls Left: "+str(self.number_pulled)+" - Pity: "+str(self.pity))
+        print(self.five+choice+" - Rolls Left: "+str(self.num_wishes)+" - Pity: "+str(self.pity))
       self.five_tally[choice] +=1
       self.guaranteed = False
     else:
       choice = random.choice(self.standard_five_stars)
       if not silenced:
-        print(self.five+choice+" - Rolls Left: "+str(self.number_pulled)+" - Pity: "+str(self.pity))
+        print(self.five+choice+" - Rolls Left: "+str(self.num_wishes)+" - Pity: "+str(self.pity))
       self.five_tally[choice] +=1
       self.guaranteed = True
     self.pity = 0
@@ -123,13 +124,13 @@ class WishSim:
     if (self.four_guaranteed):
       choice = random.choice(self.ru_four_stars)
       if not silenced:
-        print(self.four+choice+" - Rolls Left: "+str(self.number_pulled)+" - Pity: "+str(self.pity))
+        print(self.four+choice+" - Rolls Left: "+str(self.num_wishes)+" - Pity: "+str(self.pity))
       self.four_tally[choice] +=1
       self.four_guaranteed = False
     else:
       choice = random.choice(self.four_stars)
       if not silenced:
-        print(self.four+choice+" - Rolls Left: "+str(self.number_pulled)+" - Pity: "+str(self.pity))
+        print(self.four+choice+" - Rolls Left: "+str(self.num_wishes)+" - Pity: "+str(self.pity))
       self.four_tally[choice] +=1
       self.four_guaranteed = True
     self.four_pity = 0
@@ -143,9 +144,10 @@ class WishSim:
     if (guaranteed_desired == 0):
       guaranteed_desired = 100000
     begin_wishes = num_wishes
+    self.num_wishes = num_wishes
     five_stars_acquired = 0
     while (five_stars_desired > five_stars_acquired and guaranteed_desired > self.ru_count() and self.number_pulled < begin_wishes and self.ru_count() < 7 and five_stars_acquired < 14):
-      num_wishes -= 1
+      self.num_wishes -= 1
       self.pity+=1
       self.four_pity +=1
       self.number_pulled+=1
@@ -178,11 +180,11 @@ class WishSim:
           self.generate_four_star(silenced=silenced)
           continue
 
-    wishes_used = begin_wishes - num_wishes
+    wishes_used = begin_wishes - self.num_wishes
     four_stars_acquired = self.num_four_stars_pulled()
     if not silenced:
         print()
-        print("Wishes Left: " + str(num_wishes))
+        print("Wishes Left: " + str(self.num_wishes))
         print("Wishes Used: " + str(wishes_used))
         print("5⭐ total: " +str(five_stars_acquired))
         print("Rate_up 5⭐s: " +str(self.ru_count()))
