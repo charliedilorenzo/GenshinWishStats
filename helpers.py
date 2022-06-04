@@ -31,14 +31,32 @@ def print_messaged_banner(message, length = -1, mode = "single_line"):
   else:
     print("-"*divided,"{:^1}".format(message),"-"*divided+extra)
 
-def take_int_as_input(message, iter_bound = 100):
+def take_yn_as_input(message, failure_response = None, iter_bound = 100):
+  using_stored = False
+  iters = 0
+  while iters < iter_bound:
+    using_stored = input(message)
+    if (using_stored in consts.YES_RESPONSES):
+      using_stored = True
+      break
+    elif (using_stored in consts.NO_RESPONSES):
+      using_stored = False
+      break
+    if failure_response is not None:
+      print_messaged_banner(failure_response)
+  return using_stored
+
+def take_int_as_input(message, failure_response = None, iter_bound = 100, range = None):
   iters = 0
   temp = "Error"
-  while iters < 100:
+  while iters < iter_bound:
     temp = input(message)
     if (castable_as_int(temp)):
-      temp = int(temp)
-      break
+      if (range is None or int(temp) in range):
+        temp = int(temp)
+        break
+    if failure_response is not None:
+      print_messaged_banner(failure_response)
   if(iters > iter_bound or temp == "Error"):
       raise StopIteration("Too many failed inputs")
   return temp
