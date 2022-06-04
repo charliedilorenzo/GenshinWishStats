@@ -63,35 +63,25 @@ iter_bound = 100
 require_primo_options = ["Wish Statistics", "Wish Simulator", "Wish Projection"]
 options = ["Wish Statistics", "Wish Simulator", "Wish Projection"]
 
-for i in range(0,len(options)):
-  print(str(i+1)+ ". --- " + options[i])
+for i in range(1,len(options)+1):
+  print(str(i)+ ". --- " + options[i-1])
 
-while iters < 100:
-  option  = input("Please give the number corresponding to the option you want to use: ")
-  if (helpers.castable_as_int(option)):
-    if (int(option) in range(1,len(options)+1)):
-      option = int(option)-1
-      break
+option = helpers.take_int_as_input("Please give the number corresponding to the option you want to use: ", range= range(1,len(options)+1))-1
+
+# while iters < 100:
+#   option  = input("Please give the number corresponding to the option you want to use: ")
+#   if (helpers.castable_as_int(option)):
+#     if (int(option) in range(1,len(options)+1)):
+#       option = int(option)-1
+#       break
 
 print()
-print("------------------------------------------------------------------------------")
-print("Continuing for " + options[option] + " --- Press Control+c/Command+c to cancel")
-print()
+helpers.print_messaged_banner("Continuing for " + options[option] + " --- Press Control+c/Command+c to cancel", mode="triple_line")
 
 user_data = {}
 
 if options[option] in require_primo_options:
-  while iters < 100:
-    using_stored = input("Use values stored in \"userinput.py\"?(y/n): ")
-    if (using_stored in consts.YES_RESPONSES):
-      using_stored = True
-      user_data["using_stored"] =using_stored
-      break
-    elif (using_stored in consts.NO_RESPONSES):
-      using_stored = False
-      break
-    print("------------------- Invalid response querying again -------------------")
-    iters +=1
+  using_stored = helpers.take_yn_as_input("Use values stored in \"userinput.py\"?(y/n): ")
   if using_stored:
     num_primos = userinput.NUM_PRIMOS
     num_fates = userinput.NUM_FATES
@@ -102,34 +92,15 @@ if options[option] in require_primo_options:
     desired_ru =  userinput.NUM_RATEUPS_DESIRED
     banner_end_date  = userinput.BANNER_END_DATE
   else:
-    #blocks to allow users to input multiple times if the've made an error
-    while iters < iter_bound:
-      num_primos = input("Type your primogem total: ")
-      if (helpers.castable_as_int(num_primos)):
-        break
-      print("------------------- Invalid response querying again -------------------")
-      iters +=1
-
-    while iters < iter_bound:
-      num_fates = input("Type your intertwined fate total: ")
-      if (helpers.castable_as_int(num_fates)):
-        break
-      print("------------------- Invalid response querying again -------------------")
-      iters +=1
-
-    while iters < iter_bound:
-      num_starglitter = input("Type your num_starglitter total: ")
-      if (helpers.castable_as_int(num_starglitter)):
-        break
-      print("------------------- Invalid response querying again -------------------")
-      iters +=1
-
-    while iters < iter_bound:
-      num_genesis = input("Type your num_genesis crystal total: ")
-      if (helpers.castable_as_int(num_genesis)):
-        break
-      print("------------------- Invalid response querying again -------------------")
-      iters +=1
+    # function rejects respones that cannot be converted to ints
+    num_primos = helpers.take_int_as_input("Type your primogem total: ")
+    num_fates = helpers.take_int_as_input("Type your intertwined fate total: ")
+    num_starglitter = helpers.take_int_as_input("Type your num_starglitter total: ")
+    num_genesis = helpers.take_int_as_input("Type your num_genesis crystal total: ")
+    current_pity = helpers.take_int_as_input("Type current pity: ")
+    current_guaranteed = helpers.take_yn_as_input("Currently have guaranteed? (y/n): ")
+    copy_range = range(0,8)
+    desired_ru = helpers.take_int_as_input("Type amount of copies desired / number of constellations desired +1): ", range= copy_range)
 
     if(iters > iter_bound):
       raise StopIteration("Too many failed inputs")
@@ -146,11 +117,11 @@ user_data.update( {"num_primos": num_primos, "num_fates": num_fates, "num_genesi
 #   elif (store_data in consts.NO_RESPONSES):
       # store_data = False
 #     break
-#   print("------------------- Invalid response querying again -------------------")
+#   helpers.print_messaged_banner("Invalid response querying again")
 #   iters +=1
 
 print()
-print("------------------------------------------------------------------------------")
+print("-"*consts.UNIVERSAL_FORMAT_LENGTH)
 print()
 
 # ----------------------------------------------- WISH STATISTICS -----------------------------------------------
@@ -171,15 +142,11 @@ elif options[option] ==  "Wish Projection":
       if (helpers.castable_as_int(temp)):
         user_data["days_till_banner_end_date"] = int(temp)
         break
-      elif (temp.count(",") == 2):
-        temp  = temp.split(",")
-        user_data["banner_end_date"] = datetime.date(temp[2],temp[0],temp[1])
-      elif (temp.count("-") == 2):
-        temp  = temp.split("-")
-        user_data["banner_end_date"] = datetime.date(temp[2],temp[0],temp[1])
-      elif (temp.count("/") == 2):
-        temp  = temp.split("/")
-        user_data["banner_end_date"] = datetime.date(temp[2],temp[0],temp[1])
+      split_characters = [",","-","/"]
+      for split in split_characters:
+        if (temp.count(split) == 2):
+          temp  = temp.split(split)
+          user_data["banner_end_date"] = datetime.date(temp[2],temp[0],temp[1])
   elif ("banner_end_date" in user_data):
     # we find this here since its easier as an input for project_future_wishes
     days_till_banner_end_date = (user_data["banner_end_date"] - currentDate)
