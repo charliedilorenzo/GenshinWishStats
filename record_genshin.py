@@ -84,7 +84,8 @@ def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',colu
             starttime = time.perf_counter()
         output_string = str(j)
         total_pulls = j
-        stats = WishStats(total_pulls, five_stars_desired, guaranteed_desired, ["Barbara", "Beidou", "Bennett"], consts.FOUR_STARS, ["Generic"], consts.STANDARD_FIVE_STARS,set_pity=pity)
+        four_stars = consts.FOUR_STAR_WEAPONS+consts.FOUR_STAR_CHARACTERS
+        stats = WishStats(total_pulls, five_stars_desired, guaranteed_desired, ["Barbara", "Beidou", "Bennett"], four_stars, ["Generic"], consts.STANDARD_FIVE_STARS,set_pity=pity)
         stats.run_stats(trials)
         with NoStdStreams():
             ratio_list = stats.breakdown_percent_rateups()

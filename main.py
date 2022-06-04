@@ -35,7 +35,10 @@ days_till_banner_end_date = int(divmod(days_till_banner_end_date.total_seconds()
 #  BANNER INFO
 # ===========================================================================================================================================================================================
 standard_five_stars = consts.STANDARD_FIVE_STARS
-four_stars = consts.FOUR_STARS
+four_star_characters = consts.FOUR_STAR_CHARACTERS
+four_star_weapons = consts.FOUR_STAR_WEAPONS
+four_stars = four_star_characters + four_star_weapons
+
 #some default choices can be overwritten later
 ru_four_stars = ["Barbara", "Beidou", "Bennett"]
 ru_five_stars = ["Baizhu"]
