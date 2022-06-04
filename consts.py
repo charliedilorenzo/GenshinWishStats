@@ -1,20 +1,18 @@
 from datetime import date, datetime
 
+#these are numbers that are rounded from the general trends found in paimon.moe
 PROB_FIVE_STAR_AT_WISH_NUM = {74: .06, 75: .12, 76: .18, 77: .24, 78: .3, 79: .35, 80: .4, 81: .45, 82: .5, 83: .55, 84: .6, 85: .65, 86: .65, 87: .5, 88: .5, 89: .25, 90: 1}
 STANDARD_FIVE_STARS = ["Jean", "Diluc", "Qiqi", "Mona", "Keqing"]
-FOUR_STARS = ["Barbara", "Beidou", "Bennett", "Chongyun", "Diona", "Fischl", "Gorou", "Kujou Sara", "Ningguang", "Noelle", "Razor", "Rosaria", "Sayu", "Sucrose", "Thoma","Xiangling", "Xingqiu", "Xinyan", "Yanfei"]
+FOUR_STARS = ["Barbara", "Beidou", "Bennett", "Chongyun", "Diona", "Fischl", "Gorou", "Kujou Sara", "Ningguang", "Noelle", "Razor", "Rosaria", "Sayu", "Sucrose", "Thoma","Xiangling", "Xingqiu", "Xinyan", "Yanfei", "Yun Jin"]
+STANDARD_FOUR_STARS = ["Amber", "Kaeya", "Lisa"]
 
 TIMER_FOLDER = 'timer_files/'
 PRIMO_RECORD_FOLDER = 'primo_record_files/'
 PERCENTAGE_BREAKDOWN_FOLDER = 'percentage_breakdown_files/'
 
-# NUM_WISHES = 656
-NUM_WISHES = 15
-NUM_PRIMOS = 69530
-NUM_STARGLITTER = 372
-NUM_GENESIS = 4200
+YES_RESPONSES = ["Yes", "yes", "y", "Y", "true", "True"]
+NO_RESPONSES = ["No", "no", "n", "N", "false", "False"]
 
-CURRENT_PITY = 53
-CURRENT_GUARANTEED = True
-
-BANNER_END_DATE = banner_end_date = date(2022,10,4)
+INDENT =  "    "
+ # default 80 is arbitrarily selected by me
+UNIVERSAL_FORMAT_LENGTH = 80

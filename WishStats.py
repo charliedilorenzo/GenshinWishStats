@@ -12,6 +12,34 @@ from WishSim import WishSim
 from matplotlib.cbook import print_cycles
 import re
 from NoStreamObj import NoStdStreams
+import helpers
+
+def main(num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars, current_pity,current_guaranteed):
+  wishstat = WishStats(num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars, current_pity,current_guaranteed)
+  print()
+  print()
+
+  print("How many trials should be done?")
+  trials = helpers.take_int_as_input("(more takes longer and gives more accurate averages and medians, but less accurate mins/maxs):   ")
+  print()
+  print()
+  print("Press Control+C or Command+C to cancel. It may take a minute or two")
+  print()
+  print()
+  wishstat.run_stats(trials)
+  wishstat.print_stats()
+  #silence it
+  with NoStdStreams():
+    ratio_list = wishstat.breakdown_percent_rateups()
+  ratio_list = ["%.4f" % r for r in ratio_list]
+  ratio_list = [[r+"%" for r in ratio_list]]
+  labels = [ "X","C0","C1","C2","C3","C4","C5","C6"]
+  string,labels = helpers.justify_csv_double_layered_list(ratio_list, labels)
+  print("X = Didn't get the rateup")
+  print(" ".join(labels))
+  for line in string:
+    print(" ".join(line))
+  pass
 
 class WishStats:
   def __init__(self,num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars,  set_pity = 0,set_guaranteed=False):

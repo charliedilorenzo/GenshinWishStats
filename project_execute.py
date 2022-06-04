@@ -10,6 +10,7 @@ from project_future_wishes import project_future_wishes
 from datetime import date, datetime
 import helpers
 import read_files
+import userinput
 
 # ===========================================================================================================================================================================================
 #  MISC INITIALIZATION
@@ -22,13 +23,13 @@ percentage_breakdown_folder = 'percentage_breakdown_files/'
 # ===========================================================================================================================================================================================
 #  PRIMOGEM INFO
 # ===========================================================================================================================================================================================
-current_pity = consts.CURRENT_PITY
-current_guaranteed = consts.CURRENT_GUARANTEED
+current_pity = userinput.CURRENT_PITY
+current_guaranteed = userinput.CURRENT_GUARANTEED
 
-num_wishes = consts.NUM_WISHES
-num_primos = consts.NUM_PRIMOS
-num_starglitter = consts.NUM_STARGLITTER
-num_genesis = consts.NUM_GENESIS
+num_wishes = userinput.NUM_FATES
+num_primos = userinput.NUM_PRIMOS
+num_starglitter = userinput.NUM_STARGLITTER
+num_genesis = userinput.NUM_GENESIS
 
 desired_five_stars = 0
 desired_ru = 0
@@ -41,7 +42,7 @@ print("Total Current Pulls: " + str(total_pulls))
 print()
 
 days_into_update = helpers.days_into_update_count()
-banner_end_date = consts.BANNER_END_DATE
+banner_end_date = userinput.BANNER_END_DATE
 days_until_end_date = (banner_end_date - currentDate)
 days_until_end_date = int(divmod(days_until_end_date.total_seconds(), 86400)[0])
 # ===========================================================================================================================================================================================
@@ -71,9 +72,20 @@ trials = 100000
 zero_pity_filename = percentage_breakdown_folder + 'percentage_breakdown_pity_0.csv'
 current_pity_filename=  percentage_breakdown_folder + 'percentage_breakdown_pity_' + str(current_pity) + '.csv' 
 
+#No projections for the future
 print("Current Statistics:")
+print("No Pity + No Starglitter+Proj: {0}".format(total_pulls))
 temp_stats = WishStats(total_pulls, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=0, set_guaranteed=False)
 read_files.lookup_or_run_stats(total_pulls,temp_stats,filename=zero_pity_filename,pity=0)
+
+print()
+print("Pity + Starglitter+Proj: Pulls= {0}, Pity={1}, Guaranteed={2}".format(total_pulls,current_pity,current_guaranteed))
+temp_stats = WishStats(total_pulls, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=current_pity, set_guaranteed=current_guaranteed)
+if (current_pity != 0 and current_guaranteed == False):
+  read_files.lookup_or_run_stats(total_pulls,temp_stats,filename=current_pity_filename,pity=current_pity)
+if (current_pity != 0 and current_guaranteed == True):
+  read_files.lookup_or_run_stats(total_pulls,temp_stats,filename="idontexist/",pity=current_pity)
+
 
 #projecting primos for an banner date in the future
 print()

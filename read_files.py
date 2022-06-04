@@ -132,5 +132,9 @@ def read_timer_file(timer_filename):
     plt.plot(values, fit_y, '-', label='fit')
     plt.legend()
     plt.show()
-    
-    
+
+def store_user_data():
+    pass
+
+def read_user_data():
+    pass

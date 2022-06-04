@@ -10,6 +10,67 @@ from os.path import exists
 from consts import PROB_FIVE_STAR_AT_WISH_NUM
 from datetime import date, datetime
 import math
+import consts
+
+def print_messaged_banner(message, length = -1, mode = "single_line"):
+  if length == -1:
+    length = consts.UNIVERSAL_FORMAT_LENGTH
+  remaining_length = length - len(message)
+  divided = math.floor(remaining_length/2)
+  # so that we always have length the same for all lines (not fully symmetrical for message line though)
+  extra = ""
+  if len(message)+2*divided != length:
+    extra = "-"
+  #for padding
+  divided = divided-1
+  if mode == "triple_line":
+    print("-"*length)
+    print("-"*divided,"{:^1}".format(message),"-"*divided+extra)
+    print("-"*length)
+  #single line for default
+  else:
+    print("-"*divided,"{:^1}".format(message),"-"*divided+extra)
+
+def take_yn_as_input(message, failure_response = None, iter_bound = 100):
+  using_stored = False
+  iters = 0
+  while iters < iter_bound:
+    using_stored = input(message)
+    if (using_stored in consts.YES_RESPONSES):
+      using_stored = True
+      break
+    elif (using_stored in consts.NO_RESPONSES):
+      using_stored = False
+      break
+    if failure_response is not None:
+      print_messaged_banner(failure_response)
+  return using_stored
+
+def take_int_as_input(message, failure_response = None, iter_bound = 100, range = None):
+  iters = 0
+  temp = "Error"
+  while iters < iter_bound:
+    temp = input(message)
+    if (castable_as_int(temp)):
+      if (range is None or int(temp) in range):
+        temp = int(temp)
+        break
+    if failure_response is not None:
+      print_messaged_banner(failure_response)
+  if(iters > iter_bound or temp == "Error"):
+      raise StopIteration("Too many failed inputs")
+  return temp
+
+def total_primos(raw_primos, raw_fates, num_genesis, raw_starglitter):
+  total_primos = raw_primos+num_genesis+raw_fates*160+math.floor(raw_starglitter/5)*160
+  return total_primos
+
+def castable_as_int(string):
+  try:
+    int(string)
+    return True
+  except ValueError:
+    return False
 
 def justify_csv_double_layered_list(matrix, labels, extra_spaces=4):
   #justify based on the maximum length string found per column
@@ -21,18 +82,12 @@ def justify_csv_double_layered_list(matrix, labels, extra_spaces=4):
     for i in range(0,length):
       if max_length_list[i] < len(str(list[i])):
         max_length_list[i] = len(str(list[i]))
-  test = ""
   for i in range(0,length):
-    labels[i] = (str(labels[i])+",").rjust(max_length_list[i]+extra_spaces)
-    test += labels[i]
-  print(test)
+    labels[i] = (str(labels[i])).ljust(max_length_list[i]+extra_spaces)
 
   for i in range(0,len(matrix)):
-    test = ""
     for j in range(0,length):
-      matrix[i][j] = (str(matrix[i][j])+",").rjust(max_length_list[j]+extra_spaces)
-      test += str(matrix[i][j])
-    print(test)
+      matrix[i][j] = (str(matrix[i][j])).ljust(max_length_list[j]+extra_spaces)
   return matrix,labels
 
 def objective(x, a, b):

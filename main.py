@@ -1,69 +1,47 @@
+from ast import Pass
 from asyncore import read
-import random
-import matplotlib.pyplot as plt
-import numpy as np
 import math
-import sys
-import io
-import os
+import re
 import consts
 from os.path import exists
-from NoStreamObj import NoStdStreams
 import consts
-from WishSim import WishSim
 from matplotlib.cbook import print_cycles
-from WishStats import WishStats
 from plot_wishes_against_num_pulled import plot_wishes_against_num_pulled
 from project_future_wishes import project_future_wishes
-import re
-from datetime import date, datetime
+import datetime
 import helpers
-import record_genshin
-import read_files
+import userinput
+import WishSim
+import WishStats
+import project_future_wishes
 
 # ===========================================================================================================================================================================================
 #  MISC INITIALIZATION
 # ===========================================================================================================================================================================================
-currentDay = datetime.now().day
-currentDate = datetime.now().date()
+currentDay = datetime.datetime.now().day
+currentDate = datetime.datetime.now().date()
 currentVersion = 2.6
 
 input_file = 'percentage_breakdown_mostly_correct.csv'
 # ===========================================================================================================================================================================================
 #  PRIMOGEM INFO
 # ===========================================================================================================================================================================================
-current_pity = consts.CURRENT_PITY
-current_guaranteed = consts.CURRENT_GUARANTEED
-
-num_wishes = consts.NUM_WISHES
-num_primos = consts.NUM_PRIMOS
-num_starglitter = consts.NUM_STARGLITTER
-num_genesis = consts.NUM_GENESIS
-
-desired_five_stars = 0
-desired_ru = 0
-dict = {}
-
-total_pulls = math.floor((num_primos+num_genesis)/160)+num_wishes + math.floor(num_starglitter/5)
-total_primos = num_primos+num_genesis+num_wishes*160+math.floor(num_starglitter/5)*160
-print()
-print("Total Current Pulls: " + str(total_pulls))
-print()
 
 days_into_update = helpers.days_into_update_count()
-banner_end_date = consts.BANNER_END_DATE
-days_until_end_date = (banner_end_date - currentDate)
-days_until_end_date = int(divmod(days_until_end_date.total_seconds(), 86400)[0])
+banner_end_date = userinput.BANNER_END_DATE
+days_till_banner_end_date = (banner_end_date - currentDate)
+days_till_banner_end_date = int(divmod(days_till_banner_end_date.total_seconds(), 86400)[0])
 # ===========================================================================================================================================================================================
 #  BANNER INFO
 # ===========================================================================================================================================================================================
 standard_five_stars = consts.STANDARD_FIVE_STARS
 four_stars = consts.FOUR_STARS
-four_rateups = ["Barbara", "Gorou", "Xiangling"]
-rateups = ["Baizhu"]
+#some default choices can be overwritten later
+ru_four_stars = ["Barbara", "Beidou", "Bennett"]
+ru_five_stars = ["Baizhu"]
 #Cleaning Up Inputs
-for i in range(0,len(four_rateups)):
-  item = four_rateups[i]
+for i in range(0,len(ru_four_stars)):
+  item = ru_four_stars[i]
   four_stars.remove(item)
 
 # ===========================================================================================================================================================================================
@@ -78,11 +56,101 @@ days_till_end_of_banner += 21
 days_till_end_of_banner += (42-(days_into_update))
 trials = 100000
 
-print("Current Statistics:")
-temp_stats = WishStats(total_pulls, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=0, set_guaranteed=False)
-read_files.lookup_or_run_stats(total_pulls,temp_stats,filename='percentage_breakdown_mostly_correct.csv')
+#this is just to make sure that somehow an infinite loop occurs
+iters = 0
+iter_bound = 100
 
+require_primo_options = ["Wish Statistics", "Wish Simulator", "Wish Projection"]
+options = ["Wish Statistics", "Wish Simulator", "Wish Projection"]
 
-# plot_wishes_against_num_pulled(trials)
+for i in range(1,len(options)+1):
+  print(str(i)+ ". --- " + options[i-1])
 
-# record_genshin.record_primos(2.6,3, total_pulls*160,banner_end_date=banner_end_date, welkin_moon=True,battlepass=False)
+option = helpers.take_int_as_input("Please give the number corresponding to the option you want to use: ", range= range(1,len(options)+1))-1
+
+# while iters < 100:
+#   option  = input("Please give the number corresponding to the option you want to use: ")
+#   if (helpers.castable_as_int(option)):
+#     if (int(option) in range(1,len(options)+1)):
+#       option = int(option)-1
+#       break
+
+print()
+helpers.print_messaged_banner("Continuing for " + options[option] + " --- Press Control+c/Command+c to cancel", mode="triple_line")
+
+user_data = {}
+
+if options[option] in require_primo_options:
+  using_stored = helpers.take_yn_as_input("Use values stored in \"userinput.py\"?(y/n): ")
+  if using_stored:
+    num_primos = userinput.NUM_PRIMOS
+    num_fates = userinput.NUM_FATES
+    num_starglitter = userinput.NUM_STARGLITTER
+    num_genesis = userinput.NUM_GENESIS
+    current_pity = userinput.CURRENT_PITY
+    current_guaranteed = userinput.CURRENT_GUARANTEED
+    desired_ru =  userinput.NUM_RATEUPS_DESIRED
+    banner_end_date  = userinput.BANNER_END_DATE
+  else:
+    # function rejects respones that cannot be converted to ints
+    num_primos = helpers.take_int_as_input("Type your primogem total: ")
+    num_fates = helpers.take_int_as_input("Type your intertwined fate total: ")
+    num_starglitter = helpers.take_int_as_input("Type your num_starglitter total: ")
+    num_genesis = helpers.take_int_as_input("Type your num_genesis crystal total: ")
+    current_pity = helpers.take_int_as_input("Type current pity: ")
+    current_guaranteed = helpers.take_yn_as_input("Currently have guaranteed? (y/n): ")
+    copy_range = range(0,8)
+    desired_ru = helpers.take_int_as_input("Type amount of copies desired / number of constellations desired +1): ", range= copy_range)
+
+    if(iters > iter_bound):
+      raise StopIteration("Too many failed inputs")
+
+user_data.update( {"num_primos": num_primos, "num_fates": num_fates, "num_genesis": num_genesis, "num_starglitter": num_starglitter,
+  "current_pity": current_pity, "current_guaranteed": current_guaranteed, "desired_ru": desired_ru, "banner_end_date": banner_end_date})
+# TODO add ability to store this data
+# store_data = input("Would you like to store your primogem,etc data for future?")
+
+# while iters < 100:
+#   if (store_data in consts.YES_RESPONSES):
+      # store_data = True
+#     break
+#   elif (store_data in consts.NO_RESPONSES):
+      # store_data = False
+#     break
+#   helpers.print_messaged_banner("Invalid response querying again")
+#   iters +=1
+
+print()
+print("-"*consts.UNIVERSAL_FORMAT_LENGTH)
+print()
+
+# ----------------------------------------------- WISH STATISTICS -----------------------------------------------
+if options[option] == "Wish Statistics":
+  num_wishes = math.floor(helpers.total_primos(user_data["num_primos"],user_data["num_fates"], user_data["num_genesis"], user_data["num_starglitter"])/160)
+  WishStats.main(num_wishes, 0,user_data["desired_ru"], ru_four_stars, four_stars, ru_five_stars, standard_five_stars, current_pity, current_guaranteed)
+  pass
+# ----------------------------------------------- WISH SIMULATOR -----------------------------------------------
+elif options[option] == "Wish Simulator":
+  WishSim.main(user_data)
+  pass
+# ----------------------------------------------- WISH PROJECTION -----------------------------------------------
+elif options[option] ==  "Wish Projection":
+  iters = 0
+  if ("banner_end_date" not in user_data.keys()):
+    while iters < 100:
+      temp = input("Name the date or a number of days from yoday you want to project for ('n' or 'm/d/y'): ")
+      if (helpers.castable_as_int(temp)):
+        user_data["days_till_banner_end_date"] = int(temp)
+        break
+      split_characters = [",","-","/"]
+      for split in split_characters:
+        if (temp.count(split) == 2):
+          temp  = temp.split(split)
+          user_data["banner_end_date"] = datetime.date(temp[2],temp[0],temp[1])
+  elif ("banner_end_date" in user_data):
+    # we find this here since its easier as an input for project_future_wishes
+    days_till_banner_end_date = (user_data["banner_end_date"] - currentDate)
+    days_till_banner_end_date = int(divmod(days_till_banner_end_date.total_seconds(), 86400)[0])
+    user_data["days_till_banner_end_date"] = days_till_banner_end_date
+  project_future_wishes.main(user_data["num_primos"], user_data["num_fates"], user_data["num_starglitter"], user_data["days_till_banner_end_date"])
+  pass
