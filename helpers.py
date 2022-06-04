@@ -10,9 +10,11 @@ from os.path import exists
 from consts import PROB_FIVE_STAR_AT_WISH_NUM
 from datetime import date, datetime
 import math
+import consts
 
-def print_messaged_banner(message, length = 80, mode = "single_line"):
-  # default 80 is arbitrarily selected by me
+def print_messaged_banner(message, length = -1, mode = "single_line"):
+  if length == -1:
+    length = consts.UNIVERSAL_FORMAT_LENGTH
   remaining_length = length - len(message)
   divided = math.floor(remaining_length/2)
   # so that we always have length the same for all lines (not fully symmetrical for message line though)
