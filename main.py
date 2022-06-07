@@ -153,4 +153,4 @@ elif options[option] ==  "Wish Projection":
     days_till_banner_end_date = (user_data["banner_end_date"] - currentDate)
     days_till_banner_end_date = int(divmod(days_till_banner_end_date.total_seconds(), 86400)[0])
     user_data["days_till_banner_end_date"] = days_till_banner_end_date
-  project_future_wishes.main(user_data["num_primos"], user_data["num_fates"], user_data["num_starglitter"], user_data["days_till_banner_end_date"])
+  project_future_wishes.main(user_data)
