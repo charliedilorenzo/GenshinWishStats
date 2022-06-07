@@ -47,7 +47,8 @@ def take_phrase_in_list(message,phrase_dict,failure_response = None, iter_bound 
     for phrase in phrase_dict.keys():
       if (temp in phrase_dict[phrase]):
         response = phrase
-    if response == "Error":
+        break
+    if response != "Error":
       break
     elif failure_response is not None:
       print_messaged_banner(failure_response)
