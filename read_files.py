@@ -27,7 +27,6 @@ def lookup_or_run_stats(wish_num, wish_stats, filename=BREAKDOWN_FILENAME, trial
             #make sure things are spaced evenly
             output_string += "C" + str(k-1) + ": " + (str(counts[k])+"%").ljust(10)
         print(output_string)
-        pass
 
 def format_wish_breakdown(breakdownlist):
     ratio_list = breakdownlist[1:len(breakdownlist)]

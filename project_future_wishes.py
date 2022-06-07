@@ -10,7 +10,6 @@ from datetime import date, datetime
 def main(current_primos, current_fates, current_starglitter, days_till_banner_end_date):
     
     project_future_wishes(current_primos, current_fates, current_starglitter, days_till_banner_end_date)
-    pass
 
 def project_future_wishes(current_primos, current_fates, current_starglitter, days_till_banner_end_date, welkin_moon = True, battlepass = False, current_days_into_update = -1, silenced=False):
     current_total_primos = current_primos+160*math.floor(current_starglitter/5) + 160*current_fates
