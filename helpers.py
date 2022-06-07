@@ -39,13 +39,15 @@ def print_messaged_banner(message, length = -1, mode = "single_line"):
   else:
     print("-"*divided,"{:^1}".format(message),"-"*divided+extra)
 
-def take_phrase_in_list(message,list,failure_response = None, iter_bound = 100):
+def take_phrase_in_list(message,phrase_dict,failure_response = None, iter_bound = 100):
   iters = 0
   response = "Error"
   while iters < iter_bound:
     temp = input(message)
-    if (temp in list):
-      response = temp
+    for phrase in phrase_dict.keys():
+      if (temp in phrase_dict[phrase]):
+        response = phrase
+    if response == "Error":
       break
     elif failure_response is not None:
       print_messaged_banner(failure_response)

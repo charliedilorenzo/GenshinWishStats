@@ -10,7 +10,7 @@ FOUR_STAR_CHARACTERS = ["Barbara", "Beidou", "Bennett", "Chongyun", "Diona", "Fi
 FOUR_STAR_WEAPONS = ["Dragon's Bane","Eye of Perception","Favonius Codex","Favonius Greatsword","Favonius Lance","Favonius Sword","Favonius Warbow","Lion's Roar","Rainslasher","Rust","Sacrificial Bow","Sacrificial Fragments","Sacrificial Greatsword","Sacrificial Sword","The Bell","The Flute","The Stringless","The Widsith"    ]
 STANDARD_FOUR_STARS = ["Amber", "Kaeya", "Lisa"]
 #currently supported ones
-BANNER_TYPES = ["character", "weapon", "Character", "Weapon", "C", "W", "c", "w"]
+BANNER_TYPES = {"character": ["character", "Character", "c", "C"], "weapon": ["Weapon", "weapon", "W", "w"]}
 
 TIMER_FOLDER = 'timer_files/'
 PRIMO_RECORD_FOLDER = 'primo_record_files/'
