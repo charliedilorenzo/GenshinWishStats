@@ -6,4 +6,5 @@ timer_files/*
 userinput.py
 todos.txt
 todos.py
-*.pyc
+analytical_solutions.py
+__pycache__/
