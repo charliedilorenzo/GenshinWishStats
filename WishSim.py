@@ -7,18 +7,20 @@ import os
 import re
 from os.path import exists
 from NoStreamObj import NoStdStreams
-from consts import PROB_FIVE_STAR_AT_WISH_NUM
+import consts
 from helpers import y__random_under_one
 import userinput
 import math
 import consts
 import time
+import helpers
 
 
 def main(user_data, dumb_mode = True):
   #defaults
-  standard_five_stars = consts.STANDARD_FIVE_STARS
-  four_stars = consts.FOUR_STARS
+  
+  standard_five_stars = helpers.get_banner_of_type(user_data["banner_type"])
+  four_stars = consts.FOUR_STAR_CHARACTERS+consts.FOUR_STAR_WEAPONS
   ru_four_stars = userinput.RU_FOUR_STARS
   ru_five_stars = userinput.RU_FIVE_STARS
 
@@ -35,10 +37,11 @@ def main(user_data, dumb_mode = True):
   total_pulls = math.floor((num_primos+num_genesis)/160)+num_fates + math.floor(num_starglitter/5)
 
   #desired
-  desired_five_stars = 15
+  desired_five_stars = 0
+  desired_five_star = user_data["desired_five_star"]
   desired_ru = user_data["desired_ru"]
 
-  simulator = WishSim(ru_four_stars,four_stars,ru_five_stars,standard_five_stars,pity=current_pity,guaranteed=current_guaranteed)
+  simulator = WishSim(ru_four_stars,four_stars,ru_five_stars,standard_five_stars, desired_five_star=desired_five_star , pity=current_pity,guaranteed=current_guaranteed,banner_type=user_data["banner_type"])
   simulator.print_interesting_stats()
   print()
   [wishes_used, five_stars_acquired, ru_count] = simulator.roll(total_pulls,desired_five_stars,desired_ru,False, current_pity,current_guaranteed)
@@ -88,17 +91,44 @@ def main(user_data, dumb_mode = True):
   return [wishes_used, five_stars_acquired, ru_count]
 class WishSim:
 
-  def __init__(self, ru_four_stars, four_stars, ru_five_stars, five_stars, pity = 0, guaranteed = False):
+  def __init__(self, ru_four_stars, four_stars, ru_five_stars, five_stars, desired_five_star = None, pity = 0, guaranteed = False, banner_type = "character"):
+    #these are always initialized same
     self.five = "5⭐⭐⭐⭐⭐"
     self.four = "4⭐"
-    self.prob_at_value = PROB_FIVE_STAR_AT_WISH_NUM
     
+    #info given in arguments
     self.ru_four_stars = ru_four_stars
     self.four_stars = four_stars
     self.ru_five_stars = ru_five_stars
     self.standard_five_stars = five_stars
     self.guaranteed = guaranteed
     self.pity = pity
+    self.desired_five_star = desired_five_star
+    self.guaranteed_count = 0
+    self.banner_type = banner_type
+    if banner_type == "weapon":
+        self.prob_at_value = consts.PROB_FIVE_STAR_AT_WISH_NUM_WEAPONS
+        self.rate_up_prob = .75
+        #these are too messy to fix if there are too many
+        if (len(self.ru_five_stars) < 2):
+          self.ru_five_stars = self.ru_five_stars+(len(self.ru_five_stars) < 2)*["Generic 5 Star"]
+        if (len(self.ru_four_stars) < 5):
+          self.ru_four_stars = self.ru_four_stars+["Generic 4 Star " + str(i) for i in range(0, 5-len(self.ru_four_stars))]
+    else:
+      banner_type = "character"
+
+    if banner_type == "character":
+      self.prob_at_value = consts.PROB_FIVE_STAR_AT_WISH_NUM_CHARACTERS
+      self.rate_up_prob = .5
+      self.desired_five_star = self.ru_five_stars[0]
+      if (len(self.ru_five_stars) < 1):
+        self.ru_five_stars = self.ru_five_stars+(len(self.ru_five_stars) < 1)*["Generic 5 Star"]
+      if (len(self.ru_four_stars) < 3):
+        self.ru_four_stars = self.ru_four_stars+["Generic 4 Star " + str(i) for i in range(0, 3-len(self.ru_four_stars))]
+
+    #these can be inferred now
+    self.soft_pity = min(self.prob_at_value.keys())
+    self.hard_pity = max(self.prob_at_value.keys())
 
     self.four_guaranteed = False
     self.four_pity = 0
@@ -146,6 +176,8 @@ class WishSim:
     self.number_pulled = 0
     self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
+    self.guaranteed_count = 0
+    self.rolling_results = {"Wishes Used": 0, "5⭐ total": 0,"Rate_up 5⭐s": 0, "4⭐ total": 0}
 
   def print_interesting_stats(self, after=False):
     indent = consts.INDENT
@@ -163,13 +195,15 @@ class WishSim:
 
   def generate_five_star(self, silenced = False):
     # this is to check if we win 50/50, it will still run if we have guaranteed but it will not overwrite
-    if (y__random_under_one(.5)):
+    if (y__random_under_one(self.rate_up_prob)):
       self.guaranteed = True
     if (self.guaranteed):
       choice = random.choice(self.ru_five_stars)
       if not silenced:
         print(self.five+choice+" - Rolls Left: "+str(self.num_wishes)+" - Pity: "+str(self.pity))
       self.five_tally[choice] +=1
+      if (choice == self.desired_five_star):
+        self.guaranteed_count+=1
       self.guaranteed = False
     else:
       choice = random.choice(self.standard_five_stars)
@@ -181,7 +215,7 @@ class WishSim:
     self.four_pity = 0
 
   def generate_four_star(self, silenced = False):
-    if (y__random_under_one(.5)):
+    if (y__random_under_one(self.rate_up_prob)):
       self.four_guaranteed = True
     if (self.four_guaranteed):
       choice = random.choice(self.ru_four_stars)
@@ -198,33 +232,40 @@ class WishSim:
     self.four_pity = 0
 
   def roll(self, num_wishes, five_stars_desired, guaranteed_desired, silenced = False, set_pity = 0,set_guaranteed=False):
-    #cap them out, this is meaningless since if any of these numbers are about 15 they will break out of loop anyways
+    #cap them out, just in case
     self.guaranteed=set_guaranteed
     self.pity = set_pity
-    if (five_stars_desired == 0):
-      five_stars_desired = 100000
-    if (guaranteed_desired == 0):
-      guaranteed_desired = 100000
+    if (self.banner_type == "character"):
+      if (five_stars_desired <= 0 or five_stars_desired > 14):
+        five_stars_desired = 14
+      if (guaranteed_desired <= 0 or guaranteed_desired > 7):
+        guaranteed_desired = 7
+    else:
+      if (five_stars_desired <= 0 or five_stars_desired > 30):
+        five_stars_desired = 30
+      if (guaranteed_desired <= 0 or guaranteed_desired > 5):
+        guaranteed_desired = 5
     begin_wishes = num_wishes
     self.num_wishes = num_wishes
     five_stars_acquired = 0
-    while (five_stars_desired > five_stars_acquired and guaranteed_desired > self.ru_count() and self.number_pulled < begin_wishes and self.ru_count() < 7 and five_stars_acquired < 14):
+    while (five_stars_desired > five_stars_acquired and guaranteed_desired > self.guaranteed_count  and self.number_pulled < begin_wishes and self.ru_count() < 15 and five_stars_acquired < 30):
+      # print(self.guaranteed_count)
       self.num_wishes -= 1
       self.pity+=1
       self.four_pity +=1
       self.number_pulled+=1
       # 5 star block - different rates for different pity leves
-      if (y__random_under_one(0.006) and self.pity < 74):
+      if (y__random_under_one(0.006) and self.pity < self.soft_pity):
         self.generate_five_star(silenced=silenced)
         five_stars_acquired+=1
         continue
-      if (self.pity >= 74):
+      if (self.pity >= self.soft_pity):
         if (y__random_under_one(self.prob_at_value[self.pity])):
           self.generate_five_star(silenced=silenced)
           five_stars_acquired+=1
           continue
       #this shouldnt ever be run but just in case
-      if (self.pity >= 90):
+      if (self.pity >= self.hard_pity):
         self.generate_five_star(silenced=silenced)
         five_stars_acquired+=1
         continue

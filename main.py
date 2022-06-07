@@ -80,9 +80,19 @@ print()
 helpers.print_messaged_banner("Continuing for " + options[option] + " --- Press Control+c/Command+c to cancel", mode="triple_line")
 
 user_data = {}
-
+user_data["desired_five_star"] = None
 if (option != str(3)):
-  banner_type = helpers.take_phrase_in_list("What banner type are you interested in? (currently supported: character, weapon):", consts.BANNER_TYPES)
+  banner_type = helpers.take_phrase_in_list("What banner type are you interested in? (currently supported: character, weapon): ", consts.BANNER_TYPES)
+  user_data.update({"banner_type":banner_type})
+  if (banner_type == "weapon"):
+    iter = 0
+    while (iter < iter_bound):
+      desired_five_star = input("What is the rate up 5 star that you want on the weapon banner? (with Epitomized Fate): ")
+      is_correct = helpers.take_yn_as_input("The recorded five star is " + desired_five_star + " is that correct? ")
+      if (is_correct):
+        break
+      iter+=1
+    user_data["desired_five_star"] = desired_five_star
 
 if options[option] in require_primo_options:
   using_stored = helpers.take_yn_as_input("Use values stored in \"userinput.py\"?(y/n): ")
