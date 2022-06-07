@@ -48,7 +48,9 @@ days_until_end_date = int(divmod(days_until_end_date.total_seconds(), 86400)[0])
 # ===========================================================================================================================================================================================
 #  BANNER INFO
 # ===========================================================================================================================================================================================
-standard_five_stars = consts.STANDARD_FIVE_STARS
+# WE ASSUME BANNER TYPE IS CHARACTER SO NO 5 STAR WEAPONS
+banner_type = "character"
+standard_five_stars = helpers.get_banner_of_type(banner_type)
 four_star_characters = consts.FOUR_STAR_CHARACTERS
 four_star_weapons = consts.FOUR_STAR_WEAPONS
 four_stars = four_star_characters + four_star_weapons

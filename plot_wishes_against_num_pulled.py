@@ -9,12 +9,12 @@ from WishStats import WishStats
 import consts
 from os.path import exists
 from NoStreamObj import NoStdStreams
-from consts import PROB_FIVE_STAR_AT_WISH_NUM
+from consts import PROB_FIVE_STAR_AT_WISH_NUM_CHARACTERS
 from WishSim import WishSim
 from helpers import y__random_under_one
 
 def plot_wishes_against_num_pulled(trials):
-  prob_at_value = PROB_FIVE_STAR_AT_WISH_NUM
+  prob_at_value = PROB_FIVE_STAR_AT_WISH_NUM_CHARACTERS
   value = []
   count = []
   for i in range(1,91):

@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 from os.path import exists
-from consts import PROB_FIVE_STAR_AT_WISH_NUM
 import helpers
 from datetime import date, datetime
 

@@ -7,10 +7,18 @@ import io
 import os
 import re
 from os.path import exists
-from consts import PROB_FIVE_STAR_AT_WISH_NUM
 from datetime import date, datetime
 import math
 import consts
+
+def get_banner_of_type(banner_type):
+  # this we can do since we store that in a const file, however in the future might be better to store it in file
+  if (banner_type == "character"):
+    return consts.STANDARD_FIVE_STAR_CHARACTERS
+  elif(banner_type == "weapon"):
+    return consts.STANDARD_FIVE_STAR_WEAPONS
+  else:
+    return consts.STANDARD_FIVE_STAR_CHARACTERS
 
 def print_messaged_banner(message, length = -1, mode = "single_line"):
   if length == -1:
