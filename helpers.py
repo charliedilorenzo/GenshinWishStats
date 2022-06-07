@@ -39,35 +39,47 @@ def print_messaged_banner(message, length = -1, mode = "single_line"):
   else:
     print("-"*divided,"{:^1}".format(message),"-"*divided+extra)
 
+def take_phrase_in_list(message,list,failure_response = None, iter_bound = 100):
+  iters = 0
+  response = "Error"
+  while iters < iter_bound:
+    temp = input(message)
+    if (temp in list):
+      response = temp
+      break
+    elif failure_response is not None:
+      print_messaged_banner(failure_response)
+  return response
+
 def take_yn_as_input(message, failure_response = None, iter_bound = 100):
-  using_stored = False
+  response = False
   iters = 0
   while iters < iter_bound:
-    using_stored = input(message)
-    if (using_stored in consts.YES_RESPONSES):
-      using_stored = True
+    response = input(message)
+    if (response in consts.YES_RESPONSES):
+      response = True
       break
-    elif (using_stored in consts.NO_RESPONSES):
-      using_stored = False
+    elif (response in consts.NO_RESPONSES):
+      response = False
       break
-    if failure_response is not None:
+    elif failure_response is not None:
       print_messaged_banner(failure_response)
-  return using_stored
+  return response
 
 def take_int_as_input(message, failure_response = None, iter_bound = 100, range = None):
   iters = 0
-  temp = "Error"
+  response = "Error"
   while iters < iter_bound:
     temp = input(message)
     if (castable_as_int(temp)):
       if (range is None or int(temp) in range):
-        temp = int(temp)
+        response = int(temp)
         break
     if failure_response is not None:
       print_messaged_banner(failure_response)
   if(iters > iter_bound or temp == "Error"):
       raise StopIteration("Too many failed inputs")
-  return temp
+  return response
 
 def total_primos(raw_primos, raw_fates, num_genesis, raw_starglitter):
   total_primos = raw_primos+num_genesis+raw_fates*160+math.floor(raw_starglitter/5)*160
