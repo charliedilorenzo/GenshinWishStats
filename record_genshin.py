@@ -13,6 +13,7 @@ from project_future_wishes import project_future_wishes
 import re
 from datetime import datetime
 import time
+import helpers
 
 DEFAULT_COLUMN_LABELS = ["Wishes Available", "X","C0","C1","C2","C3","C4","C5","C6"]
 
@@ -42,7 +43,7 @@ def record_primos(current_update_version, updates_into_future, currrent_primo_nu
     print(future_txt)
     print(future_primo_num)
 
-def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',column_description_list=DEFAULT_COLUMN_LABELS,timer=True, five_stars_desired=0, guaranteed_desired=0,pity=0):
+def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',column_description_list=DEFAULT_COLUMN_LABELS,timer=True, five_stars_desired=0, guaranteed_desired=0,pity=0, banner_type = "character"):
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # # WRITE TO EXTERNAL FILE BREAKDOWN OF PERCENTAGE AT EACH CONSTELLATION PER AMOUNT OF WISHES
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -71,7 +72,6 @@ def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',colu
                 if line == "":
                     last_line = line
                     break
-                pass
                 last_line = line
         if (',' in last_line):
             #csv stores current wishes in first column final line
@@ -84,7 +84,9 @@ def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',colu
             starttime = time.perf_counter()
         output_string = str(j)
         total_pulls = j
-        stats = WishStats(total_pulls, five_stars_desired, guaranteed_desired, ["Barbara", "Beidou", "Bennett"], consts.FOUR_STARS, ["Generic"], consts.STANDARD_FIVE_STARS,set_pity=pity)
+        four_stars = consts.FOUR_STAR_WEAPONS+consts.FOUR_STAR_CHARACTERS
+        five_stars = helpers.get_banner_of_type(banner_type)
+        stats = WishStats(total_pulls, five_stars_desired, guaranteed_desired, ["Barbara", "Beidou", "Bennett"], four_stars, ["Generic"],  five_stars ,set_pity=pity)
         stats.run_stats(trials)
         with NoStdStreams():
             ratio_list = stats.breakdown_percent_rateups()

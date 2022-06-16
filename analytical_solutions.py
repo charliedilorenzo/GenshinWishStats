@@ -3,18 +3,19 @@ import scipy.stats
 import matplotlib.pyplot as plt
 import numpy as np
 from helpers import y__random_under_one
-from consts import PROB_FIVE_STAR_AT_WISH_NUM
+import consts
 
 class Five_Star_Analytical_Stats:
 
     def __init__(self, guaranteed,pity):
         self.five = "5⭐"
         self.four = "4⭐"
-        self.prob_at_value = PROB_FIVE_STAR_AT_WISH_NUM
+        self.prob_at_value = consts.PROB_FIVE_STAR_AT_WISH_NUM_CHARACTERS
         self.guaranteed = guaranteed
         self.pity = 0
         self.number_pulled = 0
-        self.soft_pity = min(PROB_FIVE_STAR_AT_WISH_NUM.keys())
+        self.soft_pity = min(consts.PROB_FIVE_STAR_AT_WISH_NUM_CHARACTERS.keys())
+        self.soft_pity = max(consts.PROB_FIVE_STAR_AT_WISH_NUM_CHARACTERS.keys())
 
     def below_soft_pity(self):
         if self.pity < self.soft_pity:

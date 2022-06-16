@@ -3,15 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 from os.path import exists
-from consts import PROB_FIVE_STAR_AT_WISH_NUM
 import helpers
 from datetime import date, datetime
 
 
-def main(current_primos, current_fates, current_starglitter, days_till_banner_end_date):
+def main(user_data):
     
-    project_future_wishes(current_primos, current_fates, current_starglitter, days_till_banner_end_date)
-    pass
+    project_future_wishes(user_data["num_primos"], user_data["num_fates"], user_data["num_starglitter"], user_data["days_till_banner_end_date"])
 
 def project_future_wishes(current_primos, current_fates, current_starglitter, days_till_banner_end_date, welkin_moon = True, battlepass = False, current_days_into_update = -1, silenced=False):
     current_total_primos = current_primos+160*math.floor(current_starglitter/5) + 160*current_fates

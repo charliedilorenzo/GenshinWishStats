@@ -1,24 +1,22 @@
-import random
-import matplotlib.pyplot as plt
-import numpy as np
-import sys
-import io
-import os
 import consts
 from os.path import exists
 from NoStreamObj import NoStdStreams
 import consts
 from WishSim import WishSim
 from matplotlib.cbook import print_cycles
-import re
 from NoStreamObj import NoStdStreams
 import helpers
+import math
+import userinput
 
-def main(num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars, current_pity,current_guaranteed):
-  wishstat = WishStats(num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars, current_pity,current_guaranteed)
+def main(user_data):
+  four_stars = consts.FOUR_STAR_CHARACTERS + consts.FOUR_STAR_WEAPONS
+  five_stars = helpers.get_banner_of_type(user_data["banner_type"])
+  num_wishes = math.floor(helpers.total_primos(user_data["num_primos"],user_data["num_fates"], user_data["num_genesis"], user_data["num_starglitter"])/160)
+
+  wishstat = WishStats(num_wishes, 0, user_data["desired_ru"], userinput.RU_FOUR_STARS, four_stars, userinput.RU_FIVE_STARS, five_stars, user_data["current_pity"],user_data["current_guaranteed"],banner_type=user_data["banner_type"])
   print()
   print()
-
   print("How many trials should be done?")
   trials = helpers.take_int_as_input("(more takes longer and gives more accurate averages and medians, but less accurate mins/maxs):   ")
   print()
@@ -39,10 +37,8 @@ def main(num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four
   print(" ".join(labels))
   for line in string:
     print(" ".join(line))
-  pass
-
 class WishStats:
-  def __init__(self,num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars,  set_pity = 0,set_guaranteed=False):
+  def __init__(self,num_wishes, five_stars_desired, guaranteed_desired, ru_four_stars, four_stars, ru_five_star, five_stars,  set_pity = 0,set_guaranteed=False,banner_type = "character"):
     self.total_pulls = 0
     self.tally_per_ru = { i : 0 for i in range(0,8) }
     self.tally_per_five_star = { i : 0 for i in range(0,15) }
@@ -50,7 +46,7 @@ class WishStats:
     self.trial_num = 0
     self.init_pity = set_pity
     self.init_guaranteed = set_guaranteed
-    self.wish_sim = WishSim(ru_four_stars, four_stars, ru_five_star, five_stars)
+    self.wish_sim = WishSim(ru_four_stars, four_stars, ru_five_star, five_stars,banner_type=banner_type)
 
     self.wishes_per_trial = num_wishes
     self.five_stars_desired = five_stars_desired

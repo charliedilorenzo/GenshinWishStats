@@ -1,4 +1,3 @@
-from ast import Pass
 from asyncore import read
 import math
 import re
@@ -34,8 +33,10 @@ days_till_banner_end_date = int(divmod(days_till_banner_end_date.total_seconds()
 # ===========================================================================================================================================================================================
 #  BANNER INFO
 # ===========================================================================================================================================================================================
-standard_five_stars = consts.STANDARD_FIVE_STARS
-four_stars = consts.FOUR_STARS
+four_star_characters = consts.FOUR_STAR_CHARACTERS
+four_star_weapons = consts.FOUR_STAR_WEAPONS
+four_stars = four_star_characters + four_star_weapons
+
 #some default choices can be overwritten later
 ru_four_stars = ["Barbara", "Beidou", "Bennett"]
 ru_five_stars = ["Baizhu"]
@@ -79,6 +80,19 @@ print()
 helpers.print_messaged_banner("Continuing for " + options[option] + " --- Press Control+c/Command+c to cancel", mode="triple_line")
 
 user_data = {}
+user_data["desired_five_star"] = None
+if (option != str(3)):
+  banner_type = helpers.take_phrase_in_list("What banner type are you interested in? (currently supported: character, weapon): ", consts.BANNER_TYPES)
+  user_data.update({"banner_type":banner_type})
+  if (banner_type == "weapon"):
+    iter = 0
+    while (iter < iter_bound):
+      desired_five_star = input("What is the rate up 5 star that you want on the weapon banner? (with Epitomized Fate): ")
+      is_correct = helpers.take_yn_as_input("The recorded five star is " + desired_five_star + " is that correct? ")
+      if (is_correct):
+        break
+      iter+=1
+    user_data["desired_five_star"] = desired_five_star
 
 if options[option] in require_primo_options:
   using_stored = helpers.take_yn_as_input("Use values stored in \"userinput.py\"?(y/n): ")
@@ -92,7 +106,7 @@ if options[option] in require_primo_options:
     desired_ru =  userinput.NUM_RATEUPS_DESIRED
     banner_end_date  = userinput.BANNER_END_DATE
   else:
-    # function rejects respones that cannot be converted to ints
+    # function rejects responses that cannot be converted to ints
     num_primos = helpers.take_int_as_input("Type your primogem total: ")
     num_fates = helpers.take_int_as_input("Type your intertwined fate total: ")
     num_starglitter = helpers.take_int_as_input("Type your num_starglitter total: ")
@@ -106,7 +120,7 @@ if options[option] in require_primo_options:
       raise StopIteration("Too many failed inputs")
 
 user_data.update( {"num_primos": num_primos, "num_fates": num_fates, "num_genesis": num_genesis, "num_starglitter": num_starglitter,
-  "current_pity": current_pity, "current_guaranteed": current_guaranteed, "desired_ru": desired_ru, "banner_end_date": banner_end_date})
+  "current_pity": current_pity, "current_guaranteed": current_guaranteed, "desired_ru": desired_ru, "banner_end_date": banner_end_date, "banner_type": banner_type})
 # TODO add ability to store this data
 # store_data = input("Would you like to store your primogem,etc data for future?")
 
@@ -126,13 +140,10 @@ print()
 
 # ----------------------------------------------- WISH STATISTICS -----------------------------------------------
 if options[option] == "Wish Statistics":
-  num_wishes = math.floor(helpers.total_primos(user_data["num_primos"],user_data["num_fates"], user_data["num_genesis"], user_data["num_starglitter"])/160)
-  WishStats.main(num_wishes, 0,user_data["desired_ru"], ru_four_stars, four_stars, ru_five_stars, standard_five_stars, current_pity, current_guaranteed)
-  pass
+  WishStats.main(user_data)
 # ----------------------------------------------- WISH SIMULATOR -----------------------------------------------
 elif options[option] == "Wish Simulator":
   WishSim.main(user_data)
-  pass
 # ----------------------------------------------- WISH PROJECTION -----------------------------------------------
 elif options[option] ==  "Wish Projection":
   iters = 0
@@ -152,5 +163,4 @@ elif options[option] ==  "Wish Projection":
     days_till_banner_end_date = (user_data["banner_end_date"] - currentDate)
     days_till_banner_end_date = int(divmod(days_till_banner_end_date.total_seconds(), 86400)[0])
     user_data["days_till_banner_end_date"] = days_till_banner_end_date
-  project_future_wishes.main(user_data["num_primos"], user_data["num_fates"], user_data["num_starglitter"], user_data["days_till_banner_end_date"])
-  pass
+  project_future_wishes.main(user_data)
