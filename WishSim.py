@@ -18,11 +18,14 @@ import helpers
 
 def main(user_data, dumb_mode = True):
   #defaults
-  
   standard_five_stars = helpers.get_banner_of_type(user_data["banner_type"])
   four_stars = consts.FOUR_STAR_CHARACTERS+consts.FOUR_STAR_WEAPONS
   ru_four_stars = userinput.RU_FOUR_STARS
   ru_five_stars = userinput.RU_FIVE_STARS
+
+  #temp
+  if ("ru_five_stars" in user_data.keys()):
+    ru_five_stars = user_data["ru_five_stars"]
 
   #pity, etc
   current_pity = user_data["current_pity"]
@@ -47,7 +50,6 @@ def main(user_data, dumb_mode = True):
   [wishes_used, five_stars_acquired, ru_count] = simulator.roll(total_pulls,desired_five_stars,desired_ru,False, current_pity,current_guaranteed)
 
   indent = consts.INDENT
-  assessment = ru_count >= desired_ru
   assessment = ru_count >= desired_ru
   # dumb_mode = False
   print()
@@ -88,6 +90,7 @@ def main(user_data, dumb_mode = True):
   simulator.print_interesting_stats(after=True)
   print(consts.INDENT,"Desired Number of Rateups: ", str(desired_ru))
   print()
+  print(simulator.five_tally)
   return [wishes_used, five_stars_acquired, ru_count]
 class WishSim:
 
@@ -95,6 +98,8 @@ class WishSim:
     #these are always initialized same
     self.five = "5⭐⭐⭐⭐⭐"
     self.four = "4⭐"
+    self.epitomized_path_progress = 0 
+    self.rateup_count = 0
     
     #info given in arguments
     self.ru_four_stars = ru_four_stars
@@ -104,8 +109,9 @@ class WishSim:
     self.guaranteed = guaranteed
     self.pity = pity
     self.desired_five_star = desired_five_star
-    self.guaranteed_count = 0
-    self.banner_type = banner_type
+    self.banner_type = banner_type 
+
+    # choices based on the banner
     if banner_type == "weapon":
         self.prob_at_value = consts.PROB_FIVE_STAR_AT_WISH_NUM_WEAPONS
         self.rate_up_prob = .75
@@ -136,7 +142,7 @@ class WishSim:
     self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
     self.num_wishes = 0
-    self.rolling_results = {"Wishes Used": 0, "5⭐ total": 0,"Rate_up 5⭐s": 0, "4⭐ total": 0}
+    self.rolling_results = {"Wishes Used": 0, "5⭐ total": 0,"Rate_up 5⭐s": 0, "4⭐ total": 0, "Desired Rateups Obtained": 0}
 
   def print_for_char(self, char):
     if (char in self.five_tally.keys()):
@@ -176,7 +182,7 @@ class WishSim:
     self.number_pulled = 0
     self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
-    self.guaranteed_count = 0
+    self.rateup_count = 0
     self.rolling_results = {"Wishes Used": 0, "5⭐ total": 0,"Rate_up 5⭐s": 0, "4⭐ total": 0}
 
   def print_interesting_stats(self, after=False):
@@ -192,25 +198,33 @@ class WishSim:
       print(indent, "4⭐ total: ", str(self.rolling_results["4⭐ total"]))
       print(indent, "5⭐ total: ", str(self.rolling_results["5⭐ total"]))
       print(indent, "Rate_up 5⭐s: ", str(self.rolling_results["Rate_up 5⭐s"]))
+      if self.banner_type == "weapon":
+        print(indent, "Desired Rateups Obtained: ", str(self.rolling_results["Desired Rateups Obtained"]))
 
   def generate_five_star(self, silenced = False):
     # this is to check if we win 50/50, it will still run if we have guaranteed but it will not overwrite
     if (y__random_under_one(self.rate_up_prob)):
       self.guaranteed = True
-    if (self.guaranteed):
+    if (self.epitomized_path_progress >= 2):
+      choice = self.desired_five_star
+      self.epitomized_path_progress=0
+      self.guaranteed = False
+      self.rateup_count+=1
+    elif (self.guaranteed):
       choice = random.choice(self.ru_five_stars)
-      if not silenced:
-        print(self.five+choice+" - Rolls Left: "+str(self.num_wishes)+" - Pity: "+str(self.pity))
-      self.five_tally[choice] +=1
       if (choice == self.desired_five_star):
-        self.guaranteed_count+=1
+        self.rateup_count+=1
+        self.epitomized_path_progress=0
+      else:
+        self.epitomized_path_progress+=1
       self.guaranteed = False
     else:
       choice = random.choice(self.standard_five_stars)
-      if not silenced:
-        print(self.five+choice+" - Rolls Left: "+str(self.num_wishes)+" - Pity: "+str(self.pity))
-      self.five_tally[choice] +=1
+      self.epitomized_path_progress+=1
       self.guaranteed = True
+    self.five_tally[choice] +=1
+    if not silenced:
+      print(self.five+choice+" - Rolls Left: "+str(self.num_wishes)+" - Pity: "+str(self.pity))
     self.pity = 0
     self.four_pity = 0
 
@@ -248,8 +262,7 @@ class WishSim:
     begin_wishes = num_wishes
     self.num_wishes = num_wishes
     five_stars_acquired = 0
-    while (five_stars_desired > five_stars_acquired and guaranteed_desired > self.guaranteed_count  and self.number_pulled < begin_wishes and self.ru_count() < 15 and five_stars_acquired < 30):
-      # print(self.guaranteed_count)
+    while (five_stars_desired > five_stars_acquired and guaranteed_desired > self.rateup_count  and self.number_pulled < begin_wishes and self.ru_count() < 15 and five_stars_acquired < 30):
       self.num_wishes -= 1
       self.pity+=1
       self.four_pity +=1
@@ -291,4 +304,5 @@ class WishSim:
     self.rolling_results["5⭐ total" ] = self.rolling_results["5⭐ total" ]+five_stars_acquired
     self.rolling_results["Rate_up 5⭐s" ] = self.rolling_results["Rate_up 5⭐s" ] +self.ru_count()
     self.rolling_results["4⭐ total"] = self.rolling_results["4⭐ total"]+four_stars_acquired
-    return [wishes_used, five_stars_acquired, self.ru_count()]
+    self.rolling_results["Desired Rateups Obtained"] = self.rolling_results["Desired Rateups Obtained"]+self.rateup_count
+    return [wishes_used, five_stars_acquired, self.rateup_count]
