@@ -11,6 +11,37 @@ from datetime import date, datetime
 import math
 import consts
 
+def generate_abbreviations(word_list):
+  word_list = [word_list[i].lower() for i in range(0,len(word_list))]
+  length_list = [0 for i in range(0,len(word_list))]
+  done_list = [False for i in range(0,len(word_list))]
+  true_done_list = [True for i in range(0,len(word_list))]
+  extension_list = []
+  while not done_list == true_done_list:
+      for i in range(0,len(word_list)):
+          if(done_list[i] == True):
+              continue
+          length_list[i] = length_list[i]+1
+          length = length_list[i]
+          shared_letters = word_list[i][0:length]
+          unique = True
+          for compare in word_list:
+              if compare[0:length] == shared_letters and compare != word_list[i]:
+                  unique = False
+                  break
+          if unique:
+              extension_list.append(shared_letters)
+              done_list[i] = True
+  extension_list = word_list+extension_list
+  return extension_list
+
+def generate_cases(word):
+  case_list = {word}
+  case_list.add(word.upper())
+  case_list.add(word.lower())
+  case_list.add(word.capitalize())
+  return case_list
+
 def get_banner_of_type(banner_type):
   # this we can do since we store that in a const file, however in the future might be better to store it in file
   if (banner_type == "character"):
