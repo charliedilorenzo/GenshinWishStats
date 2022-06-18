@@ -6,36 +6,12 @@ import userinput
 import consts
 import math
 
-def main(user_data):
-
-    primitive_action_list = ["Project","Produce", "Propogate", "Prussian","People", "Elmo"]
-    primitive_action_list = [primitive_action_list[i].lower() for i in range(0,len(primitive_action_list))]
-    length_list = [0 for i in range(0,len(primitive_action_list))]
-    done_list = [False for i in range(0,len(primitive_action_list))]
-    true_done_list = [True for i in range(0,len(primitive_action_list))]
-    extension_list = []
-    while not done_list == true_done_list:
-        for i in range(0,len(primitive_action_list)):
-            if(done_list[i] == True):
-                continue
-            length_list[i] = length_list[i]+1
-            length = length_list[i]
-            shared_letters = primitive_action_list[i][0:length]
-            unique = True
-            for compare in primitive_action_list:
-                if compare[0:length] == shared_letters and compare != primitive_action_list[i]:
-                    unique = False
-                    break
-            if unique:
-                extension_list.append(shared_letters)
-                done_list[i] = True
-
-    print(extension_list)
-            
-            
+def main(user_data, action_list):
     full_action_list = []
-    for item in primitive_action_list:
+    action_list = helpers.generate_abbreviations(action_list)
+    for item in action_list:
         full_action_list.extend(helpers.generate_cases(item))
+    
     
     order = []
     while order != []:
