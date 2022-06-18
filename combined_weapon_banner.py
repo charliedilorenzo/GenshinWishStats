@@ -77,7 +77,7 @@ def character_then_weapon_sim(character_copies = 7, weapon_copies = 1, character
     user_data = {}
     user_data.update( {"num_primos": num_primos, "num_fates": num_fates, "num_genesis": num_genesis, "num_starglitter": num_starglitter, "desired_five_star": desired_five_star,
     "current_pity": current_pity, "current_guaranteed": current_guaranteed, "desired_ru": desired_ru, "banner_end_date": banner_end_date, "banner_type": banner_type, "ru_five_stars": ru_five_stars})
-    character_wish_sim = WishSim.WishSim(ru_four_stars, four_stars, ru_five_stars, five_stars, desired_five_star = desired_five_star, pity = current_pity, guaranteed = current_guaranteed, banner_type = banner_type)
+    character_wish_sim = WishSim.WishSim(ru_four_stars, four_stars, ru_five_stars, five_stars, desired_five_star = desired_five_star,  banner_type = banner_type)
     character_wish_sim.roll(total_pulls, 0, desired_ru, silenced = silenced, set_pity = current_pity,set_guaranteed=current_guaranteed)
     # we calculate how many pulls we have left from the other one
     character_guaranteed= character_wish_sim.guaranteed
@@ -105,7 +105,7 @@ def character_then_weapon_sim(character_copies = 7, weapon_copies = 1, character
         banner_type = "weapon"
         user_data.update( {"num_primos": num_primos, "num_fates": num_fates, "num_genesis": num_genesis, "num_starglitter": num_starglitter, "desired_five_star": desired_five_star,
         "current_pity": current_pity, "current_guaranteed": current_guaranteed, "desired_ru": desired_ru, "banner_end_date": banner_end_date, "banner_type": banner_type, "ru_five_stars": ru_five_stars})
-        weapon_wish_sim = WishSim.WishSim(ru_four_stars, four_stars, ru_five_stars, five_stars, desired_five_star = desired_five_star, pity = current_pity, guaranteed = current_guaranteed, banner_type = banner_type)
+        weapon_wish_sim = WishSim.WishSim(ru_four_stars, four_stars, ru_five_stars, five_stars, desired_five_star = desired_five_star,  banner_type = banner_type)
         weapon_wish_sim.roll(total_pulls, 0, desired_ru, silenced = silenced, set_pity = current_pity,set_guaranteed=current_guaranteed)
         weapon_guaranteed = weapon_wish_sim.guaranteed
         weapon_pity = weapon_wish_sim.pity

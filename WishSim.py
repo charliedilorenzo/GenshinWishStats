@@ -43,11 +43,18 @@ def main(user_data, dumb_mode = True):
   desired_five_stars = 0
   desired_five_star = user_data["desired_five_star"]
   desired_ru = user_data["desired_ru"]
+  if user_data["banner_type"] == "weapon":
+    if (desired_ru <= 0 or desired_ru > 5):
+      desired_ru = 5
+  else:
+      if (desired_ru <= 0 or desired_ru > 7):
+        desired_ru = 7
 
-  simulator = WishSim(ru_four_stars,four_stars,ru_five_stars,standard_five_stars, desired_five_star=desired_five_star , pity=current_pity,guaranteed=current_guaranteed,banner_type=user_data["banner_type"])
+
+  simulator = WishSim(ru_four_stars,four_stars,ru_five_stars,standard_five_stars, desired_five_star=desired_five_star, banner_type=user_data["banner_type"])
   simulator.print_interesting_stats()
   print()
-  [wishes_used, five_stars_acquired, ru_count] = simulator.roll(total_pulls,desired_five_stars,desired_ru,False, current_pity,current_guaranteed)
+  [wishes_used, five_stars_acquired, ru_count] = simulator.roll(total_pulls,desired_five_stars,desired_ru,False,set_pity= current_pity,set_guaranteed= current_guaranteed)
 
   indent = consts.INDENT
   assessment = ru_count >= desired_ru
@@ -94,20 +101,21 @@ def main(user_data, dumb_mode = True):
   return [wishes_used, five_stars_acquired, ru_count]
 class WishSim:
 
-  def __init__(self, ru_four_stars, four_stars, ru_five_stars, five_stars, desired_five_star = None, pity = 0, guaranteed = False, banner_type = "character"):
+  def __init__(self, ru_four_stars, four_stars, ru_five_stars, five_stars, desired_five_star = None, banner_type = "character"):
     #these are always initialized same
     self.five = "5⭐⭐⭐⭐⭐"
     self.four = "4⭐"
-    self.epitomized_path_progress = 0 
     self.rateup_count = 0
+    # these can be reassigned with roll()
+    self.guaranteed = False
+    self.pity = 0
+    self.epitomized_path_progress = 0 
     
     #info given in arguments
     self.ru_four_stars = ru_four_stars
     self.four_stars = four_stars
     self.ru_five_stars = ru_five_stars
     self.standard_five_stars = five_stars
-    self.guaranteed = guaranteed
-    self.pity = pity
     self.desired_five_star = desired_five_star
     self.banner_type = banner_type 
 
@@ -178,7 +186,6 @@ class WishSim:
     self.four_guaranteed = False
     self.pity = 0
     self.four_pity = 0
-    self.total_pulls = 0
     self.number_pulled = 0
     self.five_tally = { i : 0 for i in (list(set(self.ru_five_stars + self.standard_five_stars))) }
     self.four_tally = { i : 0 for i in (list(set(self.ru_four_stars + self.four_stars))) }
@@ -245,10 +252,11 @@ class WishSim:
       self.four_guaranteed = True
     self.four_pity = 0
 
-  def roll(self, num_wishes, five_stars_desired, guaranteed_desired, silenced = False, set_pity = 0,set_guaranteed=False):
+  def roll(self, num_wishes, five_stars_desired, guaranteed_desired, silenced = False, set_pity = 0,set_guaranteed=False,set_epitomized_path = 0 ):
     #cap them out, just in case
     self.guaranteed=set_guaranteed
     self.pity = set_pity
+    self.epitomized_path_progress = 0 
     if (self.banner_type == "character"):
       if (five_stars_desired <= 0 or five_stars_desired > 14):
         five_stars_desired = 14
@@ -304,5 +312,6 @@ class WishSim:
     self.rolling_results["5⭐ total" ] = self.rolling_results["5⭐ total" ]+five_stars_acquired
     self.rolling_results["Rate_up 5⭐s" ] = self.rolling_results["Rate_up 5⭐s" ] +self.ru_count()
     self.rolling_results["4⭐ total"] = self.rolling_results["4⭐ total"]+four_stars_acquired
-    self.rolling_results["Desired Rateups Obtained"] = self.rolling_results["Desired Rateups Obtained"]+self.rateup_count
+    if self.banner_type == "weapon":
+      self.rolling_results["Desired Rateups Obtained"] = self.rolling_results["Desired Rateups Obtained"]+self.rateup_count
     return [wishes_used, five_stars_acquired, self.rateup_count]
