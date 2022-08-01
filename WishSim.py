@@ -172,14 +172,8 @@ class WishSim:
       sum += self.four_tally[i]
     return sum
   
-  def ru_count(self, name_of_rateup = None):
-    if name_of_rateup is not None:
-      return self.five_tally[name_of_rateup]
-    else:
-      sum = 0
-      for i in self.ru_five_stars:
-        sum+= self.five_tally[i]
-      return sum
+  def ru_count(self):
+      return self.five_tally[self.desired_five_star]
 
   def reset_pulls(self):
     self.guaranteed = False
