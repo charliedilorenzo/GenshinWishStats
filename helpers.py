@@ -1,4 +1,5 @@
 from cProfile import label
+from pydoc import Helper
 import random
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,6 +11,39 @@ from os.path import exists
 from datetime import date, datetime
 import math
 import consts
+from project_future_wishes import project_future_wishes
+import helpers
+
+def days_till_primo_count(primocount, welkin_moon = True, battlepass = False, current_days_into_update = -1,silenced=False):
+  current_primos = 0
+  current_fates = 0
+  current_starglitter = 0
+  #genshin probably wont last 7000 days ~ 20 years
+  for i in range(0,7000):
+    days_till_banner_end_date = i
+    if (project_future_wishes(current_primos, current_fates, current_starglitter, days_till_banner_end_date, welkin_moon, battlepass ,current_days_into_update, silenced) >= primocount):
+      return i
+  return i
+
+def combined_weapon_to_breakdown(character_successes,weapon_sucesses, character_rateup_count, weapon_rateup_count,trials):
+  percentage_character_breakdown = { i :character_rateup_count[i]/trials  for i in range(0, len(character_rateup_count))}
+  percentage_character_breakdown = [percentage_character_breakdown[i]*100 for i in range(0,len(percentage_character_breakdown))]
+  percentage_character_breakdown = ["%.4f" % r for r in percentage_character_breakdown]
+  output_string = "X: " + (str(percentage_character_breakdown[0]) + "%").ljust(10)
+  for k in range(1,len(percentage_character_breakdown)):
+      output_string +="C" + str(k-1) + ": " + (percentage_character_breakdown[k]+"%").ljust(10)
+  helpers.print_messaged_banner("Character Banner")
+  print(output_string)
+
+  percentage_weapon_breakdown = { i :weapon_rateup_count[i]/trials  for i in range(0, len(weapon_rateup_count))}
+  percentage_weapon_breakdown = [percentage_weapon_breakdown[i]*100 for i in range(0,len(percentage_weapon_breakdown))]
+  percentage_weapon_breakdown = ["%.4f" % r for r in percentage_weapon_breakdown]
+  output_string = "X: " + (str(percentage_weapon_breakdown[0]) + "%").ljust(10)
+  for k in range(1,len(percentage_weapon_breakdown)):
+      output_string +="C" + str(k-1) + ": " + (percentage_weapon_breakdown[k]+"%").ljust(10)
+  helpers.print_messaged_banner("Weapon Banner")
+  print(output_string)
+
 
 def generate_abbreviations(word_list):
   word_list = [word_list[i].lower() for i in range(0,len(word_list))]
@@ -126,22 +160,67 @@ def castable_as_int(string):
   except ValueError:
     return False
 
-def justify_csv_double_layered_list(matrix, labels, extra_spaces=4):
+def justify_csv_double_layered_list(matrix, labels, intial_setup = False, extra_spaces=4):
+  #labels are assumed to be a list
+  #matrix is assumed to be a list with any amount of lists of strings of equal length in it
   #justify based on the maximum length string found per column
-  max_length_list = []
-  for i in range(0,len(labels)):
-    max_length_list.append(len(labels[i]))
-  length = len(max_length_list)
-  for list in matrix:
-    for i in range(0,length):
-      if max_length_list[i] < len(str(list[i])):
-        max_length_list[i] = len(str(list[i]))
-  for i in range(0,length):
-    labels[i] = (str(labels[i])).ljust(max_length_list[i]+extra_spaces)
 
-  for i in range(0,len(matrix)):
-    for j in range(0,length):
-      matrix[i][j] = (str(matrix[i][j])).ljust(max_length_list[j]+extra_spaces)
+  if intial_setup:
+    #start by stripping everything:
+    for i in range(0,len(labels)):
+      labels[i] = labels[i].strip()
+    labels[-1] += "\n"
+    for i in range(0,len(matrix)):
+      for j in range(0,len(matrix[0])):
+        matrix[i][j] =  matrix[i][j].strip()
+    for i in range(0,len(matrix)):
+      matrix[i][-1]+= "\n"
+    
+    max_length_list = []
+    for i in range(0,len(labels)):
+      max_length_list.append(len(labels[i]))
+    length = len(max_length_list)
+    for list in matrix:
+      for i in range(0,length):
+        if max_length_list[i] < len(str(list[i])):
+          max_length_list[i] = len(str(list[i]))
+    
+    for i in range(0,len(max_length_list)):
+      max_length_list[i]+=extra_spaces
+
+    for i in range(0,length):
+      if (labels[i][-1] == "\n"):
+        temp = (str(labels[i][0:len(labels[i])-1])).rjust(max_length_list[i]-1)
+        temp = temp + "\n"
+        labels[i] = temp
+      else:
+        labels[i] = (str(labels[i])).rjust(max_length_list[i])
+
+    for i in range(0,len(matrix)):
+      for j in range(0,length):
+        if (matrix[i][j][-1] == "\n"):
+          temp = (str(matrix[i][j][0:len(matrix[i][j])-1])).rjust(max_length_list[j]-1)
+          temp = temp + "\n"
+          matrix[i][j] = temp
+        else:
+          matrix[i][j] = (str(matrix[i][j])).rjust(max_length_list[j])
+  #case where we already have the labels
+  else:
+    #look at the labels to find out justification
+    max_length_list = []
+    for i in range(0,len(labels)):
+      max_length_list.append(len(labels[i]))
+    length = len(max_length_list)
+    #then use those to justify properly
+    for i in range(0,len(matrix)):
+      for j in range(0,length):
+        if (matrix[i][j][-1] == "\n"):
+          temp = (str(matrix[i][j][0:len(matrix[i][j])-1])).rjust(max_length_list[j]-1)
+          temp = temp + "\n"
+          matrix[i][j] = temp
+        else:
+          matrix[i][j] = (str(matrix[i][j])).rjust(max_length_list[j])
+
   return matrix,labels
 
 def objective(x, a, b):
