@@ -96,7 +96,7 @@ if (current_pity != 0 and current_guaranteed == True):
 print()
 proj_wishes =project_future_wishes(total_primos,0,0,days_until_end_date,True,False,silenced=True)
 total_pulls = math.floor(proj_wishes/160)
-print("Days Until Banner: {0}, Version Number: {1}".format(days_until_end_date,"2.9"))
+print("Days Until Banner: {0}, Version Number: {1}".format(days_until_end_date,"3.0"))
 print("No Pity + No Starglitter+Proj: {0}".format(total_pulls))
 temp_stats = WishStats(total_pulls, desired_five_stars, desired_ru, four_rateups, four_stars, rateups, standard_five_stars,set_pity=0, set_guaranteed=False)
 read_files.lookup_or_run_stats(total_pulls,temp_stats,filename=zero_pity_filename,pity=0)
@@ -118,13 +118,13 @@ if (current_pity != 0 and current_guaranteed == False):
 if (current_pity != 0 and current_guaranteed == True):
   read_files.lookup_or_run_stats(with_starglitter,temp_stats,filename="idontexist/",pity=current_pity)
 #projecting primos for an extra update in the future
-days_until_end_date = days_until_end_date+42
+days_until_end_date = days_until_end_date+(42)*4
 proj_wishes =project_future_wishes(total_primos,0,0,days_until_end_date,True,False,silenced=True)
 total_pulls = math.floor(proj_wishes/160)
 starglitter_from_wishes = helpers.starglitter_back(total_pulls)
 with_starglitter = math.floor(starglitter_from_wishes/5) + total_pulls
 print()
-print("Days Until Banner: {0}, Version Number: {1}".format(days_until_end_date,"2.10"))
+print("Days Until Banner: {0}, Version Number: {1}".format(days_until_end_date,"3.4"))
 
 print()
 print("No Pity + Starglitter+Proj: {0}".format(with_starglitter))
