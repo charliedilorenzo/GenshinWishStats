@@ -18,30 +18,70 @@ import helpers
 DEFAULT_COLUMN_LABELS = ["Wishes Available", "X","C0","C1","C2","C3","C4","C5","C6"]
 
 def record_primos(current_update_version, updates_into_future, currrent_primo_num, filename, banner_end_date=datetime.today().date(), welkin_moon=True, battlepass=False):
-    currentDate = datetime.today().date()
+    #make sure we have file and get labels:
+    if (not exists(filename)):
+        initial_string = []
+        initial_string.append("Date Recorded,")
+        initial_string.append("Date Projected,")
+        initial_string.append("Current Primogems,")
+        initial_string.append("Primogems Projected" + "\n")
+        initial_string = initial_string
+    else:
+        #get labels
+        with open(filename, 'r') as f:
+            for line in f:
+                initial_string = line
+                break
+        initial_string = initial_string.split(",")
+        for i in range(0,len(initial_string)-1):
+            initial_string[i]+=","
+    print(initial_string)
+
+    date_recorded = datetime.today().date()
+    date_projected = banner_end_date
+
     update_version = float(current_update_version) + updates_into_future*0.1
-    current_txt = "Record of primos on {date}, Version {update_version}\n".format(date=currentDate,update_version = current_update_version)
-    future_txt = "Projection of primos on {date} for Baizhu in end of {update_version}\n".format(date=currentDate,update_version = update_version)
-    with open(filename, 'a') as f:
-        f.write(current_txt)
-        f.write(str(currrent_primo_num))
-        f.write("\n")
-    if (banner_end_date != currentDate):
-        day_difference = banner_end_date- currentDate
+    current_txt = "Record of primos on {date}, Version {update_version}".format(date=date_recorded,update_version = current_update_version)
+    future_txt = "Projection of primos on {date} for Baizhu in end of {update_version}".format(date=date_recorded,update_version = update_version)
+    #get future primos
+    if (banner_end_date != date_recorded):
+        day_difference = banner_end_date- date_recorded
         day_difference = int(divmod(day_difference.total_seconds(), 86400)[0])
         future_primo_num = project_future_wishes(currrent_primo_num,0,0,day_difference, welkin_moon=welkin_moon, battlepass= battlepass,silenced=True)
     elif(updates_into_future >0):
         days_till_end_of_banner =  42*updates_into_future
         future_primo_num = project_future_wishes(currrent_primo_num,0,0,days_till_end_of_banner, welkin_moon=welkin_moon, battlepass= battlepass)
-    with open(filename, 'a') as f:
-        f.write(future_txt)
-        f.write(str(future_primo_num ))
-        f.write("\n")
-        f.write("\n")
+
+    #what to print
     print(current_txt)
     print(currrent_primo_num)
+    print("")
     print(future_txt)
     print(future_primo_num)
+
+    output_string = []
+    output_string.append(str(date_recorded)+ ",")
+    output_string.append(str(date_projected)+ ",")
+    output_string.append(str(currrent_primo_num)+ ",")
+    output_string.append(str(future_primo_num) + "\n")
+    output_string = [output_string]
+
+    #make sure we have a file
+    if (not exists(filename)):
+        matrix,labels = helpers.justify_csv_double_layered_list(output_string,initial_string,intial_setup=True)
+    else:
+        matrix,labels = helpers.justify_csv_double_layered_list(output_string,initial_string)\
+
+    if (not exists(filename)):
+        with open(filename, 'w') as f:
+            f.write("".join(labels))
+    with open(filename, 'a') as f:
+        append_string = ""
+        for string in matrix:
+            append_string = "".join(string)
+
+        f.write(append_string)
+
 
 def record_percentage_breakdown(trials, filename='percentage_breakdown.csv',column_description_list=DEFAULT_COLUMN_LABELS,timer=True, five_stars_desired=0, guaranteed_desired=0,pity=0, banner_type = "character"):
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
