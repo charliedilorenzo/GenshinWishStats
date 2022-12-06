@@ -1,5 +1,8 @@
 # Genshin Wish Statistics
 
+# CURRENTLY NOT WORKING ON THIS VERSION ANYMORE PLEASE GO TO THE THIS NEW GITHUB
+[link to the new github repo](https://github.com/charliedilorenzo/GenshinWishOracle)
+
 ## Index
 
 - [What is this project](/README.md#what-is-this-project)
